@@ -36,6 +36,10 @@ components:
       items:
         description: "A list of accreditations for this course."
         type: object
+        required: [
+          dependent_on,
+          type
+        ]
         properties:
           accreditor_url:
             description: "A url to the accreditating bodies website. Also known as 'ACCURL' across other available data sources."
@@ -43,6 +47,10 @@ components:
           dependent_on:
             description: "An object containing the code and respective label describing whether the accreditation is dependent on student choice or not."
             type: object
+            required: [
+              code,
+              label
+            ]
             properties:
               code:
                 description: "The code representing whether the accreditation is dependent on student choice or not. Also known as 'ACCDEPEND' across other available data sources."
@@ -61,6 +69,9 @@ components:
           text:
             description: "An object containing english and/or welsh descriptions for the accreditation text."
             type: object
+            required: [
+              english
+            ]
             properties:
               english:
                 description: "English accreditation text. Also known as 'ACCTEXT' across other available data sources."
@@ -74,6 +85,9 @@ components:
           url:
             description: "Object containing english and/or welsh urls to further information on the available accreditation."
             type: object
+            required: [
+              english
+            ]
             properties:
               english:
                 description: "Also known as 'ACCDEPENDURL' across other available data sources."
@@ -106,8 +120,13 @@ components:
             "Compulsory"
           ]
     institutionLink:
-      description: "A link to the teaching institution for this course."
-      type: string
+      description: "An object to the teaching institution for this course in english and/or welsh."
+      type: object
+      properties:
+        english:
+          $ref: '#/components/schemas/englishLink'
+        welsh:
+          $ref: '#/components/schemas/welshLink'
     englishLink:
       description: "A link to the english version."
       type: string
@@ -115,37 +134,61 @@ components:
       description: "A link to the welsh version."
       type: string
     selfLink:
-      description: "A link to this resource."
-      type: string
+      description: "An object containing links to this resource in english and/or welsh."
+      type: object
+      properties:
+        english:
+          $ref: '#/components/schemas/englishLink'
+        welsh:
+          $ref: '#/components/schemas/welshLink'
     statistics:
       description: "An object containing a list of statistics."
       type: object
       properties:
         continuation:
           $ref: '#/components/schemas/continuation'
+        degree_class:
+          $ref: '#/components/schemas/degreeClass'
         employment:
           $ref: '#/components/schemas/employment'
+        entry:
+          $ref: '#/components/schemas/entry'
         job_type:
           $ref: '#/components/schemas/jobType'
         job_list:
           $ref: '#/components/schemas/jobList'
         leo:
           $ref: '#/components/schemas/leo'
+        nss:
+          $ref: '#/components/schemas/nss'
         salary:
           $ref: '#/components/schemas/salary'
+        tariff:
+          $ref: '#/components/schemas/tariff'
     subject:
       description: "An object containing subject information that the statistical data is representing."
       type: object
+      required: [
+        code,
+        english_label
+      ]
       properties:
         code:
           description: "The code to represent the subject."
           type: string
-        name:
-          description: "The name of the subject."
+        english_label:
+          description: "The name of the subject in english."
+          type: string
+        welsh_label:
+          description: "The name of the subject in welsh."
           type: string
     unavailable:
       description: "An object containing data on the unavailability of subject statistical data."
       type: object
+      required: [
+        code,
+        reason
+      ]
       properties:
         code:
           description: "The code used in conjunction with aggregation level and the country in which the course is taught that forms the unavailability resaon of the statistical data."
@@ -165,7 +208,7 @@ components:
         type: object
         properties:
           aggregation_level:
-            description: "Aggregation level applied to continuation information for students on the course. Known as 'CONTAGG' in continuation csv."
+            description: "Aggregation level applied to continuation information for students on the course. Also known as 'CONTAGG' across other available data sources."
             type: integer
             enum: [
               12,
@@ -176,22 +219,73 @@ components:
               24
             ]
           number_of_students:
-            description: "Population of students with continuation information. Known as 'CONTPOP' in continuation csv."
+            description: "Population of students with continuation information. Also known as 'CONTPOP' across other available data sources."
             type: integer
-          proportion_of_students_continuing_with_provider_after_first_year_on_course:
-            description: "Proportion of students who continued on their course at the HE provider in the year after starting the course. Known as 'UCONT' in continuation csv."
+          continuing_with_provider:
+            description: "Proportion of students who continued on their course at the HE provider in the year after starting the course. Also known as 'UCONT' across other available data sources."
             type: integer
-          proportion_of_students_dormant_after_first_year_on_course:
-            description: "Proportion of students recorded as dormant the year after they entered HE. Known as 'UDORMANT' in continuation csv."
+          dormant:
+            description: "Proportion of students recorded as dormant the year after they entered HE. Also known as 'UDORMANT' across other available data sources."
             type: integer
-          proportion_of_students_gaining_intended_award_or_higher:
-            description: "Proportion of students who gained their intended award (or higher) the year after they entered HE. Known as 'UGAINED' in continuation csv."
+          gained:
+            description: "Proportion of students who gained their intended award (or higher) the year after they entered HE. Also known as 'UGAINED' across other available data sources."
             type: integer
-          proportion_of_students_gained_lower_award:
-            description: "Proportion of students who gained a lower award than the one originally intended the year after they entered HE. Known as 'ULOWER' in continuation csv."
+          lower:
+            description: "Proportion of students who gained a lower award than the one originally intended the year after they entered HE. Also known as 'ULOWER' across other available data sources."
             type: integer
-          proportion_of_students_leaving_course:
-            description: "Proportion of students who are not continuing into their following year of study, have not been awarded a qualification in either of the two comparison years. Known as 'ULEFT' in continuation csv."
+          left:
+            description: "Proportion of students who are not continuing into their following year of study, have not been awarded a qualification in either of the two comparison years. Also known as 'ULEFT' across other available data sources."
+            type: integer
+          subject:
+            $ref: '#/components/schemas/subject'
+          unavailable:
+            $ref: '#/components/schemas/unavailable'
+    degreeClass:
+      description: "A list of degree class information for students."
+      type: array
+      items:
+        type: object
+        properties:
+          aggregation_level:
+            description: "Aggregation level applied to degree class information for students on the course. Also known as 'DEGAGG' across other available data sources."
+            type: integer
+            enum: [
+              12,
+              13,
+              14,
+              22,
+              23,
+              24
+            ]
+          number_of_students:
+            description: "Population of students with degree class information. Also known as 'DEGPOP' across other available data sources."
+            type: integer
+          first_class:
+            description: "Proportion of students gaining a first class degree. Also known as 'UFIRST' across other available data sources."
+            type: integer
+          upper_second_class:
+            description: "Proportion of students gaining an upper second class (2:1) degree. Also known as 'UUPPER' across other available data sources."
+            type: integer
+          lower_second_class:
+            description: "Proportion of students gaining a lower (or undivided) second class (2:1) degree. Also known as 'ULOWER' across other available data sources."
+            type: integer
+          other_honours_degree:
+            description: "Proportion of students gaining an other honours degree. Also known as 'UOTHER' across other available data sources."
+            type: integer
+          ordinary_degree:
+            description: "Proportion of students gaining an ordinary degree. Also known as 'UORDINARY' across other available data sources."
+            type: integer
+          distinction:
+            description: "Proportion of students gaining a distinction. Also known as 'UDISTINCTION' across other available data sources."
+            type: integer
+          merit:
+            description: "Proportion of students gaining a merit. Also known as 'UMERIT' across other available data sources."
+            type: integer
+          pass:
+            description: "Proportion of students gaining a pass. Also known as 'UPASS' across other available data sources."
+            type: integer
+          not_classified:
+            description: "Proportion of students gaining a not classified degree. Also known as 'UNA' across other available data sources."
             type: integer
           subject:
             $ref: '#/components/schemas/subject'
@@ -207,7 +301,7 @@ components:
         ]
         properties:
           aggregation_level:
-            description: "Aggregation level applied to employment information for students on the course. Known as 'EMPAGG' in employment csv."
+            description: "Aggregation level applied to employment information for students on the course. Also known as 'EMPAGG' across other available data sources."
             type: integer
             enum: [
               12,
@@ -218,28 +312,76 @@ components:
               24
             ]
           number_of_students:
-            description: "Number of students in the population from which the employment data is derived for the course. Known as 'EMPPOP' in employment csv."
+            description: "Number of students in the population from which the employment data is derived for the course. Also known as 'EMPPOP' across other available data sources."
             type: integer
-          proportion_of_students_assumed_to_be_unemployed:
-            description: "Proportion of students assumed to be unemployed six months after their course ended. Known as 'ASSUNEMP' in employment csv."
+          assumed_to_be_unemployed:
+            description: "Proportion of students assumed to be unemployed six months after their course ended. Also known as 'ASSUNEMP' across other available data sources."
             type: integer
-          proportion_of_students_in_study:
-            description: "Proportion of students who are undertaking further study six months after their course ended. Known as 'STUDY' in employment csv."
+          in_study:
+            description: "Proportion of students who are undertaking further study six months after their course ended. Also known as 'STUDY' across other available data sources."
             type: integer
-          proportion_of_students_in_work:
-            description: "Proportion of students in work six months after their course ended. Known as 'WORK' in employment csv."
+          in_work:
+            description: "Proportion of students in work six months after their course ended. Also known as 'WORK' across other available data sources."
             type: integer
-          proportion_of_students_in_work_and_study:
-            description: "Proportion of students in work and study six months after their course ended. Known as 'BOTH' in employment csv."
+          in_work_and_study:
+            description: "Proportion of students in work and study six months after their course ended. Also known as 'BOTH' across other available data sources."
             type: integer
-          proportion_of_students_in_work_or_study:
-            description: "Proportion of students in work and/or study six months after their course ended. Known as 'WORKSTUDY' in employment csv."
+          in_work_or_study:
+            description: "Proportion of students in work and/or study six months after their course ended. Also known as 'WORKSTUDY' across other available data sources."
             type: integer
-          proportion_of_students_who_are_not_available_for_work_or_study:
-            description: "Proportion of students who are not available for work or study six months after their course ended. Known as 'NOAVAIL' in employment csv."
+          not_available_for_work_or_study:
+            description: "Proportion of students who are not available for work or study six months after their course ended. Also known as 'NOAVAIL' across other available data sources."
             type: integer
           response_rate:
-            description: "Response rate of students in the population from which the employment data is derived for the course. Known as 'EMPRESP_RATE' in employment csv."
+            description: "Response rate of students in the population from which the employment data is derived for the course. Also known as 'EMPRESP_RATE' across other available data sources."
+            type: integer
+          subject:
+            $ref: '#/components/schemas/subject'
+          unavailable:
+            $ref: '#/components/schemas/unavailable'
+    entry:
+      description: "A list of entry information for students."
+      type: array
+      items:
+        type: object
+        properties:
+          aggregation_level:
+            description: "Aggregation level applied to entry information for students on the course. Also known as 'ENTAGG' across other available data sources."
+            type: integer
+            enum: [
+              12,
+              13,
+              14,
+              22,
+              23,
+              24
+            ]
+          number_of_students:
+            description: "Population of students with entry information. Also known as 'ENTPOP' across other available data sources."
+            type: integer
+          access:
+            description: "Proportion of students whose highest qualification on entry is an access course. Also known as 'ACCESS' across other available data sources."
+            type: integer
+          a_level:
+            description: "Proportion of students whose highest qualification on entry is A level or (Scottish) Highers. Also known as 'ALEVEL' across other available data sources."
+            type: integer
+          another_higher_education_qualification:
+            description: "Proportion of students whose highest qualification on entry is another HE qualification. Also known as 'OTHERHE' across other available data sources."
+            type: integer
+          baccalaureate:
+            description: "Proportion of students whose highest qualification on entry is an International Baccalaureate. Also known as 'BACC' across other available data sources."
+            type: integer
+          degree:
+            description: "Proportion of students whose highest qualification on entry is a degree or higher qualification. Also known as 'DEGREE' across other available data sources."
+            type: integer
+          foundation:
+            description: "Proportion of students whose highest qualification on entry is a foundation course. Also known as 'FOUNDTN' across other available data sources."
+            type: integer
+          none:
+            description: "Proportion of students with no qualifications on entry. Also known as 'NOQUALS' across other available data sources."
+            type: integer
+          other_qualifications:
+            description: "Proportion of students with other qualifications on entry. Also known as 'OTHER' across other available data sources."
             type: integer
           subject:
             $ref: '#/components/schemas/subject'
@@ -255,7 +397,7 @@ components:
             type: object
             properties:
               aggregation_level:
-                description: "Aggregation level applied to job list information for students on the course. Known as 'COMAGG' in common csv."
+                description: "Aggregation level applied to job list information for students on the course. Also known as 'COMAGG' across other available data sources."
                 type: integer
                 enum: [
                   12,
@@ -272,19 +414,19 @@ components:
                   type: object
                   properties:
                     job:
-                      description: "The type of employment (SOC categories). Known as 'JOB' in job list csv."
+                      description: "The type of employment (SOC categories). Also known as 'JOB' across other available data sources."
                       type: string
                     percentage_of_students:
-                      description: "The percentage of students in the type of employment. Known as 'PERC' in job list csv."
+                      description: "The percentage of students in the type of employment. Also known as 'PERC' across other available data sources."
                       type: integer
               number_of_students:
-                description: "Number of students in the population from which the job list data is derived for the course. Known as 'COMPOP' in common csv."
+                description: "Number of students in the population from which the job list data is derived for the course. Also known as 'COMPOP' across other available data sources."
                 type: integer
               order:
-                description: "The order to display the jobs in. Known as 'ORDER' in job list csv."
+                description: "The order to display the jobs in. Also known as 'ORDER' across other available data sources."
                 type: integer
               response_rate:
-                description: "Response rate of students in the population from which the job list data is derived for the course. Known as 'COMRESP_RATE' in common csv."
+                description: "Response rate of students in the population from which the job list data is derived for the course. Also known as 'COMRESP_RATE' across other available data sources."
                 type: integer
               subject:
                 $ref: '#/components/schemas/subject'
@@ -299,7 +441,7 @@ components:
         type: object
         properties:
           aggregation_level:
-            description: "Aggregation level applied to job type data for the course. Known as 'JOBAGG' in job type csv."
+            description: "Aggregation level applied to job type data for the course. Also known as 'JOBAGG' across other available data sources."
             type: integer
             enum: [
               12,
@@ -310,19 +452,19 @@ components:
               24
             ]
           number_of_students:
-            description: "Number of students in the population from which the job type data is derived for the course. Known as 'JOBPOP' in job type csv."
+            description: "Number of students in the population from which the job type data is derived for the course. Also known as 'JOBPOP' across other available data sources."
             type: integer
-          proportion_of_students_in_professional_or_managerial_jobs:
-            description: "Proportion of students in professional or managerial jobs. Known as 'PROFMAN' in job type csv."
+          in_professional_or_managerial_jobs:
+            description: "Proportion of students in professional or managerial jobs. Also known as 'PROFMAN' across other available data sources."
             type: integer
-          proportion_of_students_in_non_professional_or_managerial_jobs:
-            description: "Proportion of students in non-professional or managerial jobs. Known as 'OTHERJOB' in job type csv."
+          in_non_professional_or_managerial_jobs:
+            description: "Proportion of students in non-professional or managerial jobs. Also known as 'OTHERJOB' across other available data sources."
             type: integer
-          proportion_of_students_in_unknown_professions:
-            description: "Proportion of students whose job classification cannot be derived, or whose SOC code is unknown. Known as 'UNKWN' in job type csv."
+          in_unknown_professions:
+            description: "Proportion of students whose job classification cannot be derived, or whose SOC code is unknown. Also known as 'UNKWN' across other available data sources."
             type: integer
           response_rate:
-            description: "Response rate of students in the population from which the job type data is derived for the course. Known as 'JOBRESP_RATE' in job type csv."
+            description: "Response rate of students in the population from which the job type data is derived for the course. Also known as 'JOBRESP_RATE' across other available data sources."
             type: integer
           subject:
             $ref: '#/components/schemas/subject'
@@ -335,7 +477,7 @@ components:
         type: object
         properties:
           aggregation_level:
-            description: "Aggregation level applied to the Longitudinal Education Outcomes data for the subject (data is always subject level). Known as 'LEOAGG' in leo csv."
+            description: "Aggregation level applied to the Longitudinal Education Outcomes data for the subject (data is always subject level). Also known as 'LEOAGG' across other available data sources."
             type: integer
             enum: [
               12,
@@ -346,16 +488,53 @@ components:
               24
             ]
           higher_quartile_range:
-            description: "Upper quartile Longitudinal Education Outcomes data for the subject. Known as 'LEOUQ' in leo csv."
+            description: "Upper quartile Longitudinal Education Outcomes data for the subject. Also known as 'LEOUQ' across other available data sources."
             type: integer
           lower_quartile_range:
-            description: "Lower quartile Longitudinal Education Outcomes data for the subject. Known as 'LEOLQ' in leo csv."
+            description: "Lower quartile Longitudinal Education Outcomes data for the subject. Also known as 'LEOLQ' across other available data sources."
             type: integer
           median:
-            description: "Median Longitudinal Education Outcomes data for the subject. Known as 'LEOMED' in leo csv."
+            description: "Median Longitudinal Education Outcomes data for the subject. Also known as 'LEOMED' across other available data sources."
             type: integer
           number_of_graduates:
-            description: "Number of graduates included in the Longitudinal Education Outcomes data for the subject being used for the course. Known as 'LEOPOP' in leo csv."
+            description: "Number of graduates included in the Longitudinal Education Outcomes data for the subject being used for the course. Also known as 'LEOPOP' across other available data sources."
+            type: integer
+          subject:
+            $ref: '#/components/schemas/subject'
+          unavailable:
+            $ref: '#/components/schemas/unavailable'
+    nss:
+      description: "A list of nss information on student satisfaction of course."
+      type: array
+      items:
+        type: object
+        properties:
+          aggregation_level:
+            description: "Aggregation level applied to the national student survey (nss). Also known as 'NSSAGG' across other available data sources."
+            type: integer
+            enum: [
+              12,
+              13,
+              14,
+              22,
+              23,
+              24
+            ]
+          number_of_students:
+            description: "Number of students in the population from which the nss data is derived for the course. Also known as 'NSSPOP' across other available data sources."
+            type: integer
+          question_<n>:
+            description: "An object containing nss data regardin to question <n>. Currently the number of questions per nss dataset are from 1 to 27."
+            type: object
+            properties:
+              description:
+                description: "Contains the nss question."
+                type: string
+              agree_or_strongly_agree:
+                description: "Containing the proportion of students who agreed or stongly agree when answering the nss question."
+                type: integer
+          response_rate:
+            description: "Response rate of students in the population from which the nss data is derived for the course. Also known as 'NSSRESP_RATE' across other available data sources."
             type: integer
           subject:
             $ref: '#/components/schemas/subject'
@@ -368,7 +547,7 @@ components:
         type: object
         properties:
           aggregation_level:
-            description: "Aggregation level applied to the salary data for the course. Known as 'SALAGG' in salary csv."
+            description: "Aggregation level applied to the salary data for the course. Also known as 'SALAGG' across other available data sources."
             type: integer
             enum: [
               12,
@@ -379,26 +558,102 @@ components:
               24
             ]
           higher_quartile_range:
-            description: "Sector upper quartile salary for subject. Known as 'UQ' in salary csv."
+            description: "Sector upper quartile salary for subject. Also known as 'UQ' across other available data sources."
             type: integer
           lower_quartile_range:
-            description: "Sector lower quartile salary for subject. Known as 'LQ' in salary csv."
+            description: "Sector lower quartile salary for subject. Also known as 'LQ' across other available data sources."
             type: integer
           median:
-            description: "Sector Median salary for subject. Known as 'MED' in salary csv."
+            description: "Sector Median salary for subject. Also known as 'MED' across other available data sources."
             type: integer
           number_of_graduates:
-            description: "Number of students in the population from which the salary data is derived for the course. Known as 'SALPOP' in salary csv."
+            description: "Number of students in the population from which the salary data is derived for the course. Also known as 'SALPOP' across other available data sources."
             type: integer
           response_rate:
-            description: "Response rate of students in the population from which the salary data is derived for the course. Known as 'SALRESP_RATE' in salary csv."
+            description: "Response rate of students in the population from which the salary data is derived for the course. Also known as 'SALRESP_RATE' across other available data sources."
             type: integer
           subject:
             $ref: '#/components/schemas/subject'
           unavailable:
             $ref: '#/components/schemas/unavailable'
+    tariff: 
+      description: "A list of tariff information."
+      type: array
+      items:
+        type: object
+        properties:
+          aggregation_level:
+            description: "Aggregation level applied to the tariff data for the course. Also known as 'TARAGG' across other available data sources."
+            type: integer
+            enum: [
+              12,
+              13,
+              14,
+              22,
+              23,
+              24
+            ]
+          number_of_students:
+            description: "Number of students in the population from which the tariff data is derived for the course. Also known as 'TARPOP' across other available data sources."
+            type: integer
+          subject:
+            $ref: '#/components/schemas/subject'
+          tariffs:
+            description: "A list of tariffs that prospective students entered onto this course. Includes the number of entrants, code and description."
+            type: array
+            items:
+              description: ""
+              type: object
+              required: [
+                code,
+                description,
+                entrants
+              ]
+              properties:
+                code:
+                  description: "The tariff code representing a single range of tariff points."
+                  type: string
+                  enum: [
+                    T001,
+                    T048,
+                    T064,
+                    T080,
+                    T096,
+                    T112,
+                    T128,
+                    T144,
+                    T160,
+                    T176,
+                    T192,
+                    T208,
+                    T224,
+                    T240
+                  ]
+                description:
+                  description: "A description of the tariff code."
+                  type: string
+                  enum: [
+                    "less than 48 tariff points",
+                    "between 48 and 63 tariff points",
+                    "between 64 and 79 tariff points",
+                    "between 80 and 95 tariff points",
+                    "between 96 and 111 tariff points",
+                    "between 112 and 127 tariff points",
+                    "between 128 and 143 tariff points",
+                    "between 144 and 159 tariff points",
+                    "between 160 and 175 tariff points",
+                    "between 176 and 191 tariff points",
+                    "between 192 and 207 tariff points",
+                    "between 208 and 239 tariff points",
+                    "more than 240 tariff points"
+                  ]
+                entrants:
+                  description: "The proportion of entrants that belong to the tariff code."
+                  type: string
+          unavailable:
+            $ref: '#/components/schemas/unavailable'
     doc:
-      description: ""
+      description: "The full course document resource, including metadata."
       required: [
         _id,
         created_at,
@@ -440,7 +695,7 @@ components:
         accreditation:
           $ref: '#/components/schemas/accreditation'
         application_provider:
-          description: "This field records the UK Provider Reference Number (UKPRN) of the provider students apply to. This field will be used to indicate where students apply through one provider but are taught at another. Known as 'UKPRNAPPLY' in KIS course csv."
+          description: "This field records the UK Provider Reference Number (UKPRN) of the provider students apply to. This field will be used to indicate where students apply through one provider but are taught at another. Also known as 'UKPRNAPPLY' across other available data sources."
           type: string
         country:
           description: "Country of provider, object containing code and name."
@@ -451,7 +706,7 @@ components:
           type: object
           properties:
             code:
-              description: "Country code for teaching provider. Known as 'COUNTRY' in institution csv."
+              description: "Country code for teaching provider. Also known as 'COUNTRY' across other available data sources."
               type: string
               enum: [
                 "XF",
@@ -477,7 +732,7 @@ components:
           type: object
           properties:
             code:
-              description: "The code representing whether the course is offered wholly through distance learning. Known as 'DISTANCE' in KIS course csv."
+              description: "The code representing whether the course is offered wholly through distance learning. Also known as 'DISTANCE' across other available data sources."
               type: string
               enum: [
                 "0",
@@ -495,7 +750,7 @@ components:
         foundation_year_availability:
           $ref: '#/components/schemas/availability'
         honours_award_provision:
-          description: "Describes whether the course aim, on successful completion, would result in an honours (Hons) degree. Known as 'HONOURS' in KIS course csv."
+          description: "Describes whether the course aim, on successful completion, would result in an honours (Hons) degree. Also known as 'HONOURS' across other available data sources."
           type: boolean
         institution:
           description: "An object containing information on the teaching UK provider."
@@ -511,19 +766,19 @@ components:
               description: "The name of the publication UK provider for where the course is primarily taught."
               type: string
             public_ukprn:
-              description: "Publication UK provider reference number for where the course is primarily taught. Known as 'PUBUKPRN' across csvs."
+              description: "Publication UK provider reference number for where the course is primarily taught. Also known as 'PUBUKPRN' across other available data sources."
               type: string
             ukprn_name:
               description: "The name of the UK provider registered on the UK Register of Learning Providers (UKRLP)."
               type: string
             ukprn:
-              description: "UK provider reference number, which is the unique identifier allocated to providers by the UK Register of Learning Providers (UKRLP). Known as 'UKPRN' across csvs."
+              description: "UK provider reference number, which is the unique identifier allocated to providers by the UK Register of Learning Providers (UKRLP). Also known as 'UKPRN' across other available data sources."
               type: string
         kis_course_id:
-          description: "An identifier which uniquely identifies a course within a provider. Known as 'KISCOURSEID' across csvs."
+          description: "An identifier which uniquely identifies a course within a provider. Also known as 'KISCOURSEID' across other available data sources."
           type: string
         length_of_course:
-          description: "The total number of stages for the course. Object containing a code and equivalent label. Known as 'NUMSTAGE' in KIS course csv."
+          description: "The total number of stages for the course. Object containing a code and equivalent label. Also known as 'NUMSTAGE' across other available data sources."
           required: [
             code,
             label
@@ -567,19 +822,8 @@ components:
             self
           ]
           properties:
-            accommodation:
-              description: "URLs for further details on accommodation opportunities. Known as 'ACCOMURL' and 'ACCOMURLW' in english and welsh respectively within the LOCATION csv."
-              required: [
-                english
-              ]
-              type: object
-              properties:
-                english:
-                  $ref: '#/components/schemas/englishLink'
-                welsh:
-                  $ref: '#/components/schemas/welshLink'
             assessment_method:
-              description: "URLs explaining assessment methods of the course. Known as 'ASSURL' and 'ASSURLW' in english and welsh respectively within the KIS course csv."
+              description: "URLs explaining assessment methods of the course. Also known as 'ASSURL' and 'ASSURLW' in english and welsh respectively across other available data sources."
               required: [
                 english
               ]
@@ -590,7 +834,7 @@ components:
                 welsh:
                   $ref: '#/components/schemas/welshLink'
             course_page:
-              description: "URLs for the course page. Known as 'CRSEURL' and 'CRSEURLW' in english and welsh respectively within the KIS course csv."
+              description: "URLs for the course page. Also known as 'CRSEURL' and 'CRSEURLW' in english and welsh respectively across other available data sources."
               required: [
                 english
               ]
@@ -601,7 +845,7 @@ components:
                 welsh:
                   $ref: '#/components/schemas/welshLink'
             employment_details:
-              description: "URLs for further details on employment opportunities. Known as 'EMPLOYURL' and 'EMPLOYURLW' in english and welsh respectively within the KIS course csv."
+              description: "URLs for further details on employment opportunities. Also known as 'EMPLOYURL' and 'EMPLOYURLW' in english and welsh respectively across other available data sources."
               required: [
                 english
               ]
@@ -612,7 +856,7 @@ components:
                 welsh:
                   $ref: '#/components/schemas/welshLink'
             financial_support_details:
-              description: "Links to further details on financial support. Known as 'SUPPORTURL' and 'SUPPORTURLW' in english and welsh respectively within the KIS course csv."
+              description: "Links to further details on financial support. Also known as 'SUPPORTURL' and 'SUPPORTURLW' in english and welsh respectively across other available data sources."
               required: [
                 english
               ]
@@ -625,7 +869,7 @@ components:
             institution:
               $ref: '#/components/schemas/institutionLink'
             learning_and_teaching_methods:
-              description: "URLs explaining Learning and Teaching methods. Known as 'LTURL' and 'LTURLW' in english and welsh respectively within the KIS course csv."
+              description: "URLs explaining Learning and Teaching methods. Also known as 'LTURL' and 'LTURLW' in english and welsh respectively across other available data sources."
               required: [
                 english
               ]
@@ -638,7 +882,7 @@ components:
             self:
               $ref: '#/components/schemas/selfLink'
             student_union:
-              description: "URLs for further information on the student union. Known as 'SUURL' and 'SUURLW' in english and welsh respectively within the LOCATION csv."
+              description: "URLs for further information on the student union. Also known as 'SUURL' and 'SUURLW' in english and welsh respectively across other available data sources."
               required: [
                 english
               ]
@@ -648,36 +892,67 @@ components:
                   $ref: '#/components/schemas/englishLink'
                 welsh:
                   $ref: '#/components/schemas/welshLink'
-        location:
-          description: "Sub document containing information on course location."
-          required: [
-            changes,
-            latitude,
-            longitude
-          ]
-          type: object
-          properties:
-            changes:
-              description: "Indicator for if the teaching location changes during any part of the course. Known as 'LOCCHNGE' in KIS course csv."
-              type: boolean
-            latitude:
-              description: "Latitude reference point for the teaching location. Known as 'LATITUDE' in location csv."
-              type: string
-            longitude:
-              description: "Longitude reference point for the teaching location. Known as 'LONGITUDE' in location csv."
-              type: string
-            name:
-              description: "Teaching location name object, may contain english or welsh or both names."
-              type: object
-              properties:
-                english:
-                  description: "English name for teaching location."
-                  type: string
-                welsh:
-                  description: "Welsh name for teaching location."
-                  type: string
+        location_changes:
+          description: "Indicator for if the teaching location changes during any part of the course. Also known as 'LOCCHNGE' across other available data sources."
+          type: boolean
+        locations:
+          description: "A list of teaching locations and their respective information."
+          type: array
+          items:
+            description: "Sub documents containing information on course locations."
+            required: [
+              latitude,
+              longitude
+            ]
+            type: object
+            properties:
+              latitude:
+                description: "Latitude reference point for the teaching location. Also known as 'LATITUDE' across other available data sources."
+                type: string
+              longitude:
+                description: "Longitude reference point for the teaching location. Also known as 'LONGITUDE' across other available data sources."
+                type: string
+              links:
+                description: "A list of links relative to each teaching location associated with this course."
+                type: object
+                properties:
+                  accommodation:
+                    description: "URLs for further details on accommodation opportunities. Also known as 'ACCOMURL' and 'ACCOMURLW' in english and welsh respectively across other available data sources."
+                    required: [
+                      english
+                    ]
+                    type: object
+                    properties:
+                      english:
+                        $ref: '#/components/schemas/englishLink'
+                      welsh:
+                        $ref: '#/components/schemas/welshLink'
+                  student_union:
+                    description: "URLs for further information on the student union. Also known as 'SUURL' and 'SUURLW' in english and welsh respectively across other available data sources."
+                    required: [
+                      english
+                    ]
+                    type: object
+                    properties:
+                      english:
+                        $ref: '#/components/schemas/englishLink'
+                      welsh:
+                        $ref: '#/components/schemas/welshLink'
+              name:
+                description: "Teaching location name object, may contain  english or welsh or both names."
+                type: object
+                properties:
+                  english:
+                    description: "English name for teaching location. Also known as 'LOCNAME' across other available data sources."
+                    type: string
+                  welsh:
+                    description: "Welsh name for teaching location. Also known as 'LOCNAMEW' across other available data sources."
+                    type: string
+              ucas_course_id:
+                description: "The UCAS course code for this course. Also known as 'UCASCOURSEID' across other available data sources."
+                type: string
         mode:
-          description: "Indicator to represent if a course is advertised as full-time, part-time or both. Known as 'KISMODE' in KIS course csv."
+          description: "Indicator to represent if a course is advertised as full-time, part-time or both. Also known as 'KISMODE' across other available data sources."
           required: [
             code,
             label
@@ -701,7 +976,7 @@ components:
                 "Both"
               ]
         nhs_funded:
-          description: "Whether there are any NHS funded students on the course. Known as 'NHS' in KIS course csv."
+          description: "Whether there are any NHS funded students on the course. Also known as 'NHS' across other available data sources."
           required: [
             code,
             label
@@ -733,24 +1008,13 @@ components:
           type: object
           properties:
             code:
-              description: "The code referencing course qualification. Known as 'KISAIM' in KIS course csv."
+              description: "The code referencing course qualification. Also known as 'KISAIM' across other available data sources."
               type: string
               example: "021"
             label:
               description: "The short name (alias) of the course qualification."
               type: string
               example: "BSc"
-            level:
-              description: "The qualificatin level for course."
-              type: string
-              enum: [
-                "F",
-                "U"
-              ]
-            name:
-              description: "The long name of the course qualification."
-              type: string
-              example: "Bachelor of Science"
         sandwich_year:
           $ref: '#/components/schemas/availability'
         statistics:
@@ -763,13 +1027,13 @@ components:
           type: object
           properties:
             english:
-              description: "An english version of the title given by institution."
+              description: "An english version of the title given by institution. Also known as 'TITLE' across other available data sources."
               type: string
             welsh:
-              description: "A welsh version of the title given by institution."
+              description: "A welsh version of the title given by institution. Also known as 'TITLEW' across other available data sources."
               type: string
-        ucas_code_id:
-          description: "The unique identifier given to course by UCAS."
+        ucas_programme_id:
+          description: "The UCAS programme code for this course. Also known as 'UCASPROGID' across other available data sources."
           type: string
         year_abroad:
           $ref: '#/components/schemas/availability'
@@ -793,7 +1057,7 @@ components:
                   type: object
                   properties:
                     <key>:
-                      description: ""
+                      description: "The value of the key in question."
                       type: string
   parameters:
     institutionID:

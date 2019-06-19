@@ -687,6 +687,7 @@ components:
         mode,
         qualification,
         sandwich_year,
+        subject_code,
         title,
         year_abroad
       ]
@@ -1001,9 +1002,7 @@ components:
           description: "Further details of the qualification of course."
           required: [
             code,
-            label,
-            level,
-            name
+            label
           ]
           type: object
           properties:
@@ -1019,6 +1018,9 @@ components:
           $ref: '#/components/schemas/availability'
         statistics:
           $ref: '#/components/schemas/statistics'
+        subject_code:
+          description: "The code for the subject."
+          type: string
         title:
           description: "The title given to course by institution."
           required: [

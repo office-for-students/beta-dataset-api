@@ -1018,9 +1018,16 @@ components:
           $ref: '#/components/schemas/availability'
         statistics:
           $ref: '#/components/schemas/statistics'
-        subject_code:
-          description: "The code for the subject."
-          type: string
+        subject:
+          description: "The course subject area"
+          type: object
+          properties:
+            code:
+              description: "The code for the subject. Also known as 'SBJ' across other available data sources."
+              type: string
+            name:
+              description: "The respective name given to the subject code."
+              type: string
         title:
           description: "The title given to course by institution."
           required: [

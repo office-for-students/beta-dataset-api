@@ -102,3 +102,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+.python_packages
+beta-dataset-api/beta-dataset-api.zip

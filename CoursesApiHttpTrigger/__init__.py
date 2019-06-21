@@ -9,10 +9,10 @@ from .utils import (get_collection_link, get_cosmos_client, get_not_found_json)
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    """Implements the REST API endpoint for getting course documents. 
+    """Implements the REST API endpoint for getting course documents.
 
     The endpoint implemented is:
-        /institutions/{institution_id}/courses/{course_id}/modes/{mode} 
+        /institutions/{institution_id}/courses/{course_id}/modes/{mode}
 
     The API is fully documented in a swagger document within the same repo
     as this module - https://github.com/office-for-students/beta-dataset-api
@@ -40,8 +40,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     # Get the course
     course = course_fetcher.get_course(**params)
 
-    logging.info(type(course))
-    logging.info(course)
 
     if course:
         return func.HttpResponse(course,
@@ -50,4 +48,4 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     else:
         return func.HttpResponse(get_not_found_json(),
                                  headers={"Content-Type": "application/json"},
-                                 status_code=400)
+                                 status_code=404)

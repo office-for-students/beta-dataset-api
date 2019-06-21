@@ -105,3 +105,6 @@ venv.bak/
 
 .python_packages
 beta-dataset-api/beta-dataset-api.zip
+
+# For testing only 
+setup_env_vars.sh

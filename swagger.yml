@@ -7,9 +7,49 @@ info:
     name: ""
     url: ""
 paths:
+  /institutions:
+    get:
+      summary: "Returns a list of institution resources."
+      parameters:
+        - $ref: '#/components/parameters/institutionID'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/version'
+      responses:
+        200:
+          description: "Returns a list of institution resources that offers higher education courses."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/institutions'
+        400:
+          $ref: '#/components/responses/InvalidRequestError'
+        404:
+          $ref: '#/components/responses/ResourceNotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /institutions/{institution_id}:
+    get:
+      summary: "Returns a single institution resource."
+      parameters:
+        - $ref: '#/components/parameters/institutionID'
+        - $ref: '#/components/parameters/version'
+      responses:
+        200:
+          description: "Returns a single institution resource that offers higher education courses."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/institutionDoc'
+        400:
+          $ref: '#/components/responses/InvalidRequestError'
+        404:
+          $ref: '#/components/responses/ResourceNotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
   /institutions/{institution_id}/courses/{course_id}/modes/{mode}:
     get:
-      summary: "Returns a single course resource"
+      summary: "Returns a single course resource."
       parameters:
         - $ref: '#/components/parameters/institutionID'
         - $ref: '#/components/parameters/courseID'
@@ -17,11 +57,11 @@ paths:
         - $ref: '#/components/parameters/version'
       responses:
         200:
-          description: "Returns a list of all skills in organisation thus far"
+          description: "Returns a single higher education course resource."
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/doc'
+                $ref: '#/components/schemas/courseDoc'
         400:
           $ref: '#/components/responses/InvalidRequestError'
         404:
@@ -30,6 +70,40 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   schemas:
+    institutions:
+      description: ""
+      type: object
+      properties:
+        institutions:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  self:
+                    $ref: '#/components/schemas/selfLink'
+              public_ukprn_name:
+                description: "The name of the publication UK provider for where the course is primarily taught."
+                type: string
+              public_ukprn:
+                description: "Publication UK provider reference number for where the course is primarily taught. Also known as 'PUBUKPRN' across other available data sources."
+                type: string
+        limit:
+          description: "The number of items requested, defaults to 20 when parameter is not set as a query parameter."
+          type: integer
+          default: 20
+        number_of_items:
+          description: "The number of institutions returned, this will equal the limit value unless there are less items to be returned then the limit."
+          type: integer
+        offset:
+          description: "The number of institutions requested to skip before starting to collect the result set."
+          type: integer
+          default: 0
+        total_number_of_institutions:
+          description: "The total number of institutions available to iterate over."
+          type: integer
     accreditation:
       description: "An object containing information on accreditation for this course."
       type: array
@@ -119,6 +193,60 @@ components:
             "Optional",
             "Compulsory"
           ]
+    distance_learning:
+      description: "Whether the course is offered wholly through distance learning. Containing code and label."
+      required: [
+        code,
+        label
+      ]
+      type: object
+      properties:
+        code:
+          description: "The code representing whether the course is offered wholly through distance learning. Also known as 'DISTANCE' across other available data sources."
+          type: string
+          enum: [
+            "0",
+            "1",
+            "2"
+          ]
+        label:
+          description: "The label describing whether the course is offered wholly through distance learning."
+          type: string
+          enum: [
+            "Course is available other than by distance learning",
+            "Course is only available through distance learning",
+            "Course is optionally available through distance learning"
+          ]
+    honours_award_provision:
+      description: "Describes whether the course aim, on successful completion, would result in an honours (Hons) degree. Also known as 'HONOURS' across other available data sources."
+      type: boolean
+    kis_course_id:
+      description: "An identifier which uniquely identifies a course within a provider. Also known as 'KISCOURSEID' across other available data sources."
+      type: string
+    kis_mode:
+      description: "Indicator to represent if a course is advertised as full-time, part-time or both. Also known as 'KISMODE' across other available data sources."
+      required: [
+        code,
+        label
+      ]
+      type: object
+      properties:
+        code:
+          description: "The code representing how the course is identified."
+          type: string
+          enum: [
+            "1",
+            "2",
+            "3"
+          ]
+        label:
+          description: "The description for code representing how the course is identified."
+          type: string
+          enum: [
+            "Full-time",
+            "Part-time",
+            "Both"
+          ]
     institutionLink:
       description: "An object to the teaching institution for this course in english and/or welsh."
       type: object
@@ -134,13 +262,37 @@ components:
       description: "A link to the welsh version."
       type: string
     selfLink:
-      description: "An object containing links to this resource in english and/or welsh."
+      description: "A link to this resource."
+      type: string
+    qualification:
+      description: "Further details of the qualification of course."
+      required: [
+        code,
+        label
+       ]
+      type: object
+      properties:
+        code:
+          description: "The code referencing course qualification. Also known as 'KISAIM' across other available data sources."
+          type: string
+          example: "021"
+        label:
+          description: "The short name (alias) of the course qualification."
+          type: string
+          example: "BSc"
+    title:
+      description: "The title given to course by institution."
+      required: [
+        english
+      ]
       type: object
       properties:
         english:
-          $ref: '#/components/schemas/englishLink'
+          description: "An english version of the title given by institution. Also known as 'TITLE' across other available data sources."
+          type: string
         welsh:
-          $ref: '#/components/schemas/welshLink'
+          description: "A welsh version of the title given by institution. Also known as 'TITLEW' across other available data sources."
+          type: string
     statistics:
       description: "An object containing a list of statistics."
       type: object
@@ -652,11 +804,190 @@ components:
                   type: string
           unavailable:
             $ref: '#/components/schemas/unavailable'
-    doc:
+    institutionDoc:
+      description: "The full institution document resource, including metadata."
+      required: [
+        _id,
+        created_at,
+        institution,
+        version
+      ]
+      type: object
+      properties:
+        _id:
+          description: "A unique identifier for this resource"
+          type: string
+        created_at:
+          description: "A timestamp of when this resource was created"
+          type: string
+        institution:
+          $ref: '#/components/schemas/institution'
+        version:
+          description: "The version number of course document, this represents the nth update to a specific course and can be used to control which version should be available via the dataset API"
+          type: integer
+    institution:
+      description: "Details of institution"
+      required: [
+        contact_details,
+        courses,
+        links,
+        public_ukprn_name,
+        public_ukprn,
+        public_ukprn_country,
+        tef_outcome,
+        total_number_of_courses,
+        ukprn_name,
+        ukprn,
+        ukprn_country
+      ]
+      type: object
+      properties:
+        apr_outcome:
+          description: "The Outcome of Annual Provider Review (APR). Also known as APROutcome acrossother available data sources."
+          type: string
+        contact_details:
+          type: object
+          properties:
+            address:
+              type: object
+              properties:
+                line_1:
+                  description: "First line of address of the publication UK provider where the course is primarily taught."
+                  type: string
+                line_2:
+                  description: "Second line of address of the publication UK provider where the course is primarily taught."
+                  type: string
+                line_3:
+                  description: "Third line of address of the publication UK provider address where the course is primarily taught."
+                  type: string
+                town:
+                  description: "The town or city in the publication UK provider address where the course is primarily taught."
+                  type: string
+                county:
+                  description: "The county in the publication UK provider address where the course is primarily taught."
+                  type: string
+                post_code:
+                  description: "The post code of the publication UK provider address where the course is primarily taught."
+                  type: string
+            telephone:
+              description: "The contact telphone number of the publication UK provider where the course is primarily taught."
+              type: string
+        courses:
+          description: "A list of course that are taught at this institution."
+          type: array
+          items:
+            description: "A single course including high level information available on the institution resource."
+            type: object
+            required: [
+              distance_learning,
+              honours_award_provision,
+              kis_course_id,
+              kis_mode,
+              links,
+              locations,
+              qualification,
+              sandwich_year,
+              title,
+              year_abroad,
+            ]
+            properties:
+              distance_learning:
+                $ref: '#/components/schemas/distance_learning'
+              honours_award_provision:
+                $ref: '#/components/schemas/honours_award_provision'
+              kis_course_id:
+                $ref: '#/components/schemas/kis_course_id'
+              kis_mode:
+                $ref: '#/components/schemas/kis_mode'
+              links:
+                description: "A list of links related to the course resource"
+                type: object
+                properties:
+                  course_page:
+                    description: "Object containing links to the course page on the providers website."
+                    type: object
+                    properties:
+                      english:
+                        $ref: '#/components/schemas/englishLink'
+                      welsh:
+                        $ref: '#/components/schemas/welshLink'
+                  self:
+                    $ref: '#/components/schemas/selfLink'
+              locations:
+                description: "A list of locations that this course is taught at."
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      description: "Object containing the name of the teaching location in english or/and welsh."
+                      type: object
+                      properties:
+                        english:
+                          description: "The english name for teaching location."
+                          type: string
+                        welsh:
+                          description: "The welsh name for teaching location."
+                          type: string
+              qualification:
+                $ref: '#/components/schemas/qualification'
+              sandwich_year:
+                $ref: '#/components/schemas/availability'
+              title:
+                $ref: '#/components/schemas/title'
+              year_abroad:
+                $ref: '#/components/schemas/availability'
+        links:
+          description: "A list of links related to the institution resource."
+          type: object
+          properties:
+            institution_homepage:
+              description: "A link to the institution/providers homepage."
+              type: string
+            self:
+              $ref: '#/components/schemas/selfLink'
+            student_union:
+              description: "A list of student union links that relates to this institution resource."
+              type: array
+              items:
+                type: object
+                properties:
+                  english:
+                    description: "A link to the english version of the student union webpage."
+                    type: string
+                  welsh:
+                    description: "A link to the welsh version of the student union webpage."
+                    type: string
+        public_ukprn_country:
+          description: "The country in which the publication UK provider for where the course is primarily taught is located."
+          type: string
+        public_ukprn_name:
+          description: "The name of the publication UK provider for where the course is primarily taught."
+          type: string
+        public_ukprn:
+          description: "Publication UK provider reference number for where the course is primarily taught. Also known as 'PUBUKPRN' across other available data sources."
+          type: string
+        tef_outcome:
+          description: "The Outcome of Provider's Teaching Excellence Framework (TEF) review. Also known as TEFOutcome acrossother available data sources."
+          type: string
+        total_number_of_courses:
+          description: "The number of courses that are taught with this provider/institution."
+          type: integer
+        ukprn_country:
+          description: "The country in which the UK provider was registered to be located in on the UK Register of Learning Providers (UKRLP)."
+          type: string
+        ukprn_name:
+          description: "The name of the UK provider registered on the UK Register of Learning Providers (UKRLP)."
+          type: string
+        ukprn:
+          description: "UK provider reference number, which is the unique identifier allocated to providers by the UK Register of Learning Providers (UKRLP). Also known as 'UKPRN' across other available data sources."
+          type: string
+    courseDoc:
       description: "The full course document resource, including metadata."
       required: [
         _id,
         created_at,
+        course,
         version
       ]
       type: object
@@ -725,34 +1056,11 @@ components:
                 "Wales"
               ]
         distance_learning:
-          description: "Whether the course is offered wholly through distance learning. Containing code and label."
-          required: [
-            code,
-            label
-          ]
-          type: object
-          properties:
-            code:
-              description: "The code representing whether the course is offered wholly through distance learning. Also known as 'DISTANCE' across other available data sources."
-              type: string
-              enum: [
-                "0",
-                "1",
-                "2"
-              ]
-            label:
-              description: "The label describing whether the course is offered wholly through distance learning."
-              type: string
-              enum: [
-                "Course is available other than by distance learning",
-                "Course is only available through distance learning",
-                "Course is optionally available through distance learning"
-              ]
+          $ref: '#/components/schemas/distance_learning'
         foundation_year_availability:
           $ref: '#/components/schemas/availability'
         honours_award_provision:
-          description: "Describes whether the course aim, on successful completion, would result in an honours (Hons) degree. Also known as 'HONOURS' across other available data sources."
-          type: boolean
+          $ref: '#/components/schemas/honours_award_provision'
         institution:
           description: "An object containing information on the teaching UK provider."
           required: [
@@ -953,29 +1261,7 @@ components:
                 description: "The UCAS course code for this course. Also known as 'UCASCOURSEID' across other available data sources."
                 type: string
         mode:
-          description: "Indicator to represent if a course is advertised as full-time, part-time or both. Also known as 'KISMODE' across other available data sources."
-          required: [
-            code,
-            label
-          ]
-          type: object
-          properties:
-            code:
-              description: "The code representing how the course is identified."
-              type: string
-              enum: [
-                "1",
-                "2",
-                "3"
-              ]
-            label:
-              description: "The description for code representing how the course is identified."
-              type: string
-              enum: [
-                "Full-time",
-                "Part-time",
-                "Both"
-              ]
+          $ref: '#/components/schemas/kis_mode'
         nhs_funded:
           description: "Whether there are any NHS funded students on the course. Also known as 'NHS' across other available data sources."
           required: [
@@ -999,21 +1285,7 @@ components:
                 "Any"
               ]
         qualification:
-          description: "Further details of the qualification of course."
-          required: [
-            code,
-            label
-          ]
-          type: object
-          properties:
-            code:
-              description: "The code referencing course qualification. Also known as 'KISAIM' across other available data sources."
-              type: string
-              example: "021"
-            label:
-              description: "The short name (alias) of the course qualification."
-              type: string
-              example: "BSc"
+          $ref: '#/components/schemas/qualification'
         sandwich_year:
           $ref: '#/components/schemas/availability'
         statistics:
@@ -1032,18 +1304,7 @@ components:
               description: "The respective name in welsh given to the subject code."
               type: string
         title:
-          description: "The title given to course by institution."
-          required: [
-            english
-          ]
-          type: object
-          properties:
-            english:
-              description: "An english version of the title given by institution. Also known as 'TITLE' across other available data sources."
-              type: string
-            welsh:
-              description: "A welsh version of the title given by institution. Also known as 'TITLEW' across other available data sources."
-              type: string
+          $ref: '#/components/schemas/title'
         ucas_programme_id:
           description: "The UCAS programme code for this course. Also known as 'UCASPROGID' across other available data sources."
           type: string
@@ -1086,6 +1347,16 @@ components:
       required: true
       schema:
         type: string
+    limit:
+      description: "The numbers of items to return"
+      in: query
+      name: limit
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
     mode:
       description: "The course mode, possible values are 1 (Full-time), 2 (Part-time) and 3 (Both). Also known as 'KISMODE' across other available sources."
       in: path
@@ -1098,6 +1369,15 @@ components:
           "2",
           "3"
         ]
+    offset:
+      description: "The number of items to skip before starting to collect the result set"
+      in: query
+      name: offset
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
     version:
       description: "The version number of course document, this represents the nth update to a specific course and can be used to control which version should be available via the dataset API. If it is not set the version is set to the latest stable one."
       in: query

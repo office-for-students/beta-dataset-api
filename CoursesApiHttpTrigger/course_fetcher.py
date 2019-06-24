@@ -1,9 +1,9 @@
 import json
 import logging
+import sys
 
 import azure.cosmos.cosmos_client as cosmos_client
 import azure.cosmos.errors as errors
-import sys
 
 
 class CourseFetcher:
@@ -19,11 +19,10 @@ class CourseFetcher:
         Queries the Cosmos DB container for a course using the
         arguments passed in. If a course is found, it removes
         the additonal fields Cosmos DB added before returning it
-        to the caller, otherwise it returns None.
+        to the caller. If no course is found it returns None.
 
         """
 
-        logging.info(f'client {self.client}')
         logging.info(f'client {self.collection_link}')
 
         # Create an SQL query to retrieve the course document
@@ -47,16 +46,20 @@ class CourseFetcher:
         if not len(courses_list):
             return None
 
-        # We don't expect more than one course to be returned so log an
-        # error if it is.
+        # Log an error if more than one course is returned by query.
         if len(courses_list) > 1:
-            # Something's wrong. There should only be one matching course.
+            # Something's wrong; there should be only one matching course.
             course_count = len(courses_list)
             logging.error(
-                f'{course_count} courses were returned. There should be one.')
+                f'{course_count} courses returned. There should be only one.')
 
+        # Get the course from the list.
         course = courses_list[0]
+
+        # Remove unnecessary keys from the course.
         tidied_course = CourseFetcher.tidy_course(course)
+
+        # Convert the course to JSON and return
         return json.dumps(tidied_course)
 
     @staticmethod
@@ -71,4 +74,3 @@ class CourseFetcher:
                 logging.warning(
                     f"The expected Comsos DB key was not found: {key}")
         return course
-

@@ -1,5 +1,11 @@
 """
-This module contains unittests for the Azure function.
+This module contains unittests for the Azure DataSet course 
+function.
+
+The tests assume that a container has been loaded with the
+JSON course data. They could be extended to create
+a container and load it with course data.
+
 To run these tests:
 
     * export your Azure test environment variables (see below)
@@ -68,7 +74,7 @@ class TestCourseEndPoint(unittest.TestCase):
 
 
     def test_endpoint_for_non_existing_course(self):
-        """Call the endpoint for course that does not exists"""
+        """Call the endpoint for course that does not exist"""
 
         # A course that does not exists in the HESA dataset
         institution_id = '100000'

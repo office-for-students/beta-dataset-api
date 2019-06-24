@@ -25,14 +25,28 @@ def get_collection_link():
     return 'dbs/' + cosmosdb_database_id + '/colls/' + cosmosdb_collection_id
 
 
-def get_not_found_json():
-    """Returns a JSON object indicating 404 Not Found"""
+def get_http_error_response_json(error_title, error_key, error_value):
+    """Returns a JSON object indicating an Http Error"""
     outer = {}
     outer["errors"] = []
     outer["errors"].append({
-        'error': 'Not Found',
+        'error': error_title,
         'error_values': [{
-            '404': 'Not Found'
+            error_key: error_value 
         }]
     })
     return json.dumps(outer)
+
+def validate_get_course_params(params):
+
+    # First check all params are present
+    if not mandatory_params_present(('institution_id', 'course_id', 'mode'), params):
+        return False
+
+
+
+
+def mandatory_params_present(mandatory_params, params):
+    if all(k in params for k in mandatory_params):
+        return True
+    return False

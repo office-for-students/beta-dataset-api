@@ -687,7 +687,7 @@ components:
         mode,
         qualification,
         sandwich_year,
-        subject_code,
+        subject,
         title,
         year_abroad
       ]
@@ -1025,8 +1025,11 @@ components:
             code:
               description: "The code for the subject. Also known as 'SBJ' across other available data sources."
               type: string
-            name:
-              description: "The respective name given to the subject code."
+            english_label:
+              description: "The respective name in english given to the subject code."
+              type: string
+            welsh_label:
+              description: "The respective name in welsh given to the subject code."
               type: string
         title:
           description: "The title given to course by institution."

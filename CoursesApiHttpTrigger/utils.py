@@ -9,7 +9,10 @@ def get_cosmos_client():
 
     # Get the relevant environment variables
     cosmosdb_uri = os.environ['AzureCosmosDbUri']
+
+    # This should use the read only key (least privilege)
     cosmosdb_key = os.environ['AzureCosmosDbKey']
+
     master_key = 'masterKey'
 
     # Initialise anf return the Cosmos client
@@ -32,21 +35,7 @@ def get_http_error_response_json(error_title, error_key, error_value):
     outer["errors"].append({
         'error': error_title,
         'error_values': [{
-            error_key: error_value 
+            error_key: error_value
         }]
     })
     return json.dumps(outer)
-
-def validate_get_course_params(params):
-
-    # First check all params are present
-    if not mandatory_params_present(('institution_id', 'course_id', 'mode'), params):
-        return False
-
-
-
-
-def mandatory_params_present(mandatory_params, params):
-    if all(k in params for k in mandatory_params):
-        return True
-    return False

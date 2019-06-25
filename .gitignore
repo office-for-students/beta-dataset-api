@@ -102,3 +102,17 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+.python_packages
+beta-dataset-api/beta-dataset-api.zip
+
+# For testing only 
+setup_env_vars.sh
+
+# Azure Functions artifacts
+bin
+obj
+appsettings.json
+local.settings.json
+.python_packages
+beta-data-pipelines.zip

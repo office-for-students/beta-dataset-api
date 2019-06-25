@@ -10,7 +10,8 @@ def valid_course_params(params):
         logging.error(f"Mandatory parameters missing from: {params}")
         return False
 
-    if not valid_param("institution_id", params['institution_id'], 8, 8, r'[\d]+$'):
+    if not valid_param("institution_id", params['institution_id'], 8, 8,
+                       r'[\d]+$'):
         return False
 
     if not valid_param("course_id", params['course_id'], 1, 30, r'[\w-]+$'):
@@ -19,7 +20,8 @@ def valid_course_params(params):
     if not valid_param("mode", params['mode'], 1, 1, r'[123]$'):
         return False
 
-    if not valid_param("version", params['version'], 1, 3, r'\d{1,3}$'):
+    # No upper limit on version; setting to 100 chars should be more than enough!
+    if not valid_param("version", params['version'], 1, 100, r'[\d]+$'):
         return False
 
     return True

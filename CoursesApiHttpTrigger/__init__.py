@@ -18,8 +18,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     The endpoint implemented is:
         /institutions/{institution_id}/courses/{course_id}/modes/{mode}
 
-    The API is fully documented in a swagger document within the same repo
-    as this module - https://github.com/office-for-students/beta-dataset-api
+    The API is fully documented in a swagger document in the same repo
+    as this module.
     """
 
     try:
@@ -36,7 +36,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         #
         # The params are used in DB queries, so let's do
-        # some basic sanitisation.
+        # some basic sanitisation of them.
         #
         if not valid_course_params(params):
             logging.error(f"valid_course_params returned false for {params}")
@@ -46,7 +46,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 headers={"Content-Type": "application/json"},
                 status_code=400)
 
-        logging.info('Passed param validation')
+        logging.info('The parameters look good')
 
         # Intialise a CourseFetcher
         client = get_cosmos_client()
@@ -57,6 +57,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         course = course_fetcher.get_course(**params)
 
         if course:
+            logging.info(f'Found a course {course}')
             return func.HttpResponse(
                 course,
                 headers={"Content-Type": "application/json"},
@@ -67,8 +68,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                                              'Course was not found.'),
                 headers={"Content-Type": "application/json"},
                 status_code=404)
+
     except Exception as e:
         logging.error(traceback.format_exc())
 
-        # Currently raise so Azure sends back the HTTP 500
+        # Raise so Azure sends back the HTTP 500
         raise e

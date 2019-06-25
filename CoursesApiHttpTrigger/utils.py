@@ -15,7 +15,7 @@ def get_cosmos_client():
 
     master_key = 'masterKey'
 
-    # Initialise anf return the Cosmos client
+    # Initialise and return the Cosmos client
     return cosmos_client.CosmosClient(url_connection=cosmosdb_uri,
                                       auth={master_key: cosmosdb_key})
 

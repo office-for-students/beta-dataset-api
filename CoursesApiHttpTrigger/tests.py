@@ -293,6 +293,44 @@ class TestCourseEndPoint(unittest.TestCase):
             error_msg['errors'][0]["error_values"][0]['Parameter Error'],
             'Invalid parameter passed')
 
+
+    def test_endpoint_with_invalid_value_one_mode(self):
+
+        institution_id = '10000055'
+        course_id = 'AB37'
+        mode = 'one'  # one is an invalid for for mode
+
+        # Construct a mock HTTP request.
+        req = func.HttpRequest(
+            method='GET',
+            body=None,
+            url=
+            f'/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}',
+            params={'version': '1'},
+            route_params={
+                'institution_id': institution_id,
+                'course_id': course_id,
+                'mode': mode
+            })
+
+        # Call the function for the endpoint.
+        resp = main(req)
+
+        # Check status code
+        self.assertEqual(resp.status_code, 400)
+
+        # Check content type
+        headers = dict(resp.headers)
+        self.assertEqual(headers['content-type'], 'application/json')
+
+        # Do some checking of the returned error message.
+        error_msg = json.loads(resp.get_body().decode('utf-8'))
+        print(error_msg)
+        self.assertEqual(error_msg['errors'][0]["error"], "Bad Request")
+        self.assertEqual(
+            error_msg['errors'][0]["error_values"][0]['Parameter Error'],
+            'Invalid parameter passed')
+
     def test_endpoint_with_invalid_char_4_mode(self):
 
         institution_id = '10000055'

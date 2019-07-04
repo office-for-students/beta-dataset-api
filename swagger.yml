@@ -84,10 +84,10 @@ components:
                 properties:
                   self:
                     $ref: '#/components/schemas/selfLink'
-              public_ukprn_name:
+              pub_ukprn_name:
                 description: "The name of the publication UK provider for where the course is primarily taught."
                 type: string
-              public_ukprn:
+              pub_ukprn:
                 description: "Publication UK provider reference number for where the course is primarily taught. Also known as 'PUBUKPRN' across other available data sources."
                 type: string
         limit:
@@ -831,9 +831,9 @@ components:
         contact_details,
         courses,
         links,
-        public_ukprn_name,
-        public_ukprn,
-        public_ukprn_country,
+        pub_ukprn_name,
+        pub_ukprn,
+        pub_ukprn_country,
         tef_outcome,
         total_number_of_courses,
         ukprn_name,
@@ -958,13 +958,13 @@ components:
                   welsh:
                     description: "A link to the welsh version of the student union webpage."
                     type: string
-        public_ukprn_country:
+        pub_ukprn_country:
           description: "The country in which the publication UK provider for where the course is primarily taught is located."
           type: string
-        public_ukprn_name:
+        pub_ukprn_name:
           description: "The name of the publication UK provider for where the course is primarily taught."
           type: string
-        public_ukprn:
+        pub_ukprn:
           description: "Publication UK provider reference number for where the course is primarily taught. Also known as 'PUBUKPRN' across other available data sources."
           type: string
         tef_outcome:
@@ -1064,17 +1064,17 @@ components:
         institution:
           description: "An object containing information on the teaching UK provider."
           required: [
-            public_ukprn_name,
-            public_ukprn,
+            pub_ukprn_name,
+            pub_ukprn,
             ukprn_name,
             ukprn
           ]
           type: object
           properties:
-            public_ukprn_name:
+            pub_ukprn_name:
               description: "The name of the publication UK provider for where the course is primarily taught."
               type: string
-            public_ukprn:
+            pub_ukprn:
               description: "Publication UK provider reference number for where the course is primarily taught. Also known as 'PUBUKPRN' across other available data sources."
               type: string
             ukprn_name:
@@ -1334,7 +1334,7 @@ components:
                       type: string
   parameters:
     institutionID:
-      description: "The publication UK provider reference number (public_ukprn) of the institution that the course is associated with. Also known as the 'PUBUKPRN' across other available sources."
+      description: "The publication UK provider reference number (pub_ukprn) of the institution that the course is associated with. Also known as the 'PUBUKPRN' across other available sources."
       in: path
       name: institution_id
       required: true

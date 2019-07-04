@@ -69,7 +69,7 @@ class TestCourseEndPoint(unittest.TestCase):
 
         # Do some checking of the returned course.
         course = json.loads(resp.get_body().decode('utf-8'))
-        self.assertEqual(course['course']['institution']['public_ukprn'],
+        self.assertEqual(course['course']['institution']['pub_ukprn'],
                          f"{institution_id}")
 
     def test_endpoint_for_non_existing_course(self):

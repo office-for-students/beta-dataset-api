@@ -28,7 +28,7 @@ class CourseFetcher:
         # Create an SQL query to retrieve the course document
         query = (
             "SELECT * from c "
-            f"where c.course.institution.public_ukprn = '{institution_id}' "
+            f"where c.course.institution.pub_ukprn = '{institution_id}' "
             f"and c.course.kis_course_id = '{course_id}' "
             f"and c.course.mode.code = '{mode}' "
             f"and c.version = '{version}' ")

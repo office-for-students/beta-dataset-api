@@ -7,11 +7,47 @@ info:
     name: ""
     url: ""
 paths:
+  /dataset/versions:
+    get:
+      summary: "Returns a list of institution resources."
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        200:
+          description: "Returns a list of dataset resources that were sent to service by HESA."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/datasets'
+        400:
+          $ref: '#/components/responses/InvalidRequestError'
+        404:
+          $ref: '#/components/responses/ResourceNotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /dataset/versions/{version}:
+    get:
+      summary: "Returns a list of institution resources."
+      parameters:
+        - $ref: '#/components/parameters/datsetVersion'
+      responses:
+        200:
+          description: "Returns a single dataset resource that was sent to service by HESA."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dataset'
+        400:
+          $ref: '#/components/responses/InvalidRequestError'
+        404:
+          $ref: '#/components/responses/ResourceNotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
   /institutions:
     get:
       summary: "Returns a list of institution resources."
       parameters:
-        - $ref: '#/components/parameters/institutionID'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/version'
@@ -70,8 +106,88 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   schemas:
+    datasets:
+      description: "A list of datasets that have at the least attempted to be imported through the data import pipeline."
+      type: object
+      properties:
+        limit:
+          description: "The number of items requested, defaults to 20 when parameter is not set as a query parameter."
+          type: integer
+          default: 20
+        number_of_items:
+          description: "The number of datasets returned, this will equal the limit value unless there are less items to be returned then the limit."
+          type: integer
+        offset:
+          description: "The number of datasets requested to skip before starting to collect the result set."
+          type: integer
+          default: 0
+        total_number_of_datasets:
+          description: "The total number of datasets available to iterate over."
+          type: integer
+        datasets:
+          type: array
+          items:
+            type: object
+            properties:
+              created_at:
+                description: "A timestamp of when this resource was created."
+                type: string
+              links:
+                type: object
+                properties:
+                  self: 
+                    $ref: '#/components/schemas/selfLink'
+              status:
+                description: "The import status of the dataset version."
+                type: string
+                enum: [
+                  "in-progress",
+                  "failed",
+                  "completed"
+                ]
+              version:
+                description: "The version number of dataset."
+                type: integer
+    dataset:
+      type: object
+      properties:
+        builds:
+          description: "A list of builds to define which sub sections of the import pipeline have completed."
+          type: object
+          properties:
+            courses:
+              $ref: '#/components/schemas/build'
+            institutions:
+              $ref: '#/components/schemas/build'
+            search:
+              $ref: '#/components/schemas/build'
+        created_at:
+          description: "A timestamp of when this resource was created."
+          type: string
+        links:
+          type: object
+          properties:
+            self: 
+              $ref: '#/components/schemas/selfLink'
+        status:
+          description: "The import status of the dataset version."
+          type: string
+          enum: [
+            "in-progress",
+            "failed",
+            "succeeded"
+          ]
+        total_number_of_courses:
+          description: "The total number of courses in this version of the dataset."
+          type: integer
+        total_number_of_institutions:
+          description: "The total number of institutions in this version of the dataset."
+          type: integer
+        version:
+          description: "The version number of dataset"
+          type: integer
     institutions:
-      description: ""
+      description: "A list of institution resources."
       type: object
       properties:
         institutions:
@@ -169,6 +285,22 @@ components:
               welsh:
                 description: "Also known as 'ACCDEPENDURLW' across other available data sources."
                 type: string
+    build:
+      description: "The build job object to define how far a single part of the import process has completed."
+      type: object
+      properties:
+        number_of_resources_loaded:
+          description: "The number of resources loaded for build job."
+          type: integer
+        status: 
+          description: "The status of the build job."
+          type: string
+          enum: [
+            "pending",
+            "in-progress",
+            "failed",
+            "completed"
+          ]
     availability:
       description: "Availability of parent object."
       required: [
@@ -988,6 +1120,9 @@ components:
         _id,
         created_at,
         course,
+        course_id,
+        course_mode,
+        institution_id,
         version
       ]
       type: object
@@ -1000,8 +1135,22 @@ components:
           type: string
         course:
           $ref: '#/components/schemas/course'
+        course_id:
+          description: "An identifier which uniquely identifies a course within a provider. Also known as 'KISCOURSEID' across other available data sources."
+          type: string
+        course_mode:
+          description: "Indicator to represent if a course is advertised as full-time, part-time or both. Also known as 'KISMODE' across other available data sources."
+          type: integer
+          enum: [
+            0,
+            1,
+            2
+          ]
+        institution_id:
+          description: "The name of the publication UK provider for where the course is primarily taught."
+          type: string
         version:
-          description: "The version number of course document, this represents the nth update to a specific course and can be used to control which version should be available via the dataset API"
+          description: "The version number of course document, this represents the nth update to a specific course and can be used to control which version should be available via the dataset API."
           type: integer
     course:
       description: "Details of course and related statistics"
@@ -1333,6 +1482,13 @@ components:
                       description: "The value of the key in question."
                       type: string
   parameters:
+    datsetVersion:
+      description: "The version number of the dataset document, this represents the nth update to the unistats dataset and can be used to control which version should be available via the dataset API."
+      in: path
+      name: version
+      required: true
+      schema:
+        type: string
     institutionID:
       description: "The publication UK provider reference number (pub_ukprn) of the institution that the course is associated with. Also known as the 'PUBUKPRN' across other available sources."
       in: path

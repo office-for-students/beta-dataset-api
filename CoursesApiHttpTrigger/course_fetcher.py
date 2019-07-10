@@ -28,9 +28,9 @@ class CourseFetcher:
         # Create an SQL query to retrieve the course document
         query = (
             "SELECT * from c "
-            f"where c.course.institution.pub_ukprn = '{institution_id}' "
-            f"and c.course.kis_course_id = '{course_id}' "
-            f"and c.course.mode.code = '{mode}' "
+            f"where c.institution_id = '{institution_id}' "
+            f"and c.course_id = '{course_id}' "
+            f"and c.course_mode = '{mode}' "
             f"and c.version = '{version}' ")
 
         logging.info(f'query: {query}')
@@ -66,7 +66,7 @@ class CourseFetcher:
     def tidy_course(course):
         """Removes the key/value pairs Cosmos DB adds to the course"""
 
-        keys_to_delete = ['_rid', '_self', '_etag', '_attachments', '_ts']
+        keys_to_delete = ['_rid', '_self', '_etag', '_attachments', '_ts', 'institution_id', 'course_id', 'course_mode']
         for key in keys_to_delete:
             try:
                 del course[key]

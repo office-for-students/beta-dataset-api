@@ -31,7 +31,7 @@ class CourseFetcher:
             f"where c.institution_id = '{institution_id}' "
             f"and c.course_id = '{course_id}' "
             f"and c.course_mode = '{mode}' "
-            f"and c.version = '{version}' ")
+            f"and c.version = {version} ")
 
         logging.info(f'query: {query}')
 

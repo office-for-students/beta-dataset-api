@@ -771,10 +771,10 @@ components:
               23,
               24
             ]
-          higher_quartile_range:
+          higher_quartile:
             description: "Upper quartile Longitudinal Education Outcomes data for the subject. Also known as 'LEOUQ' across other available data sources."
             type: integer
-          lower_quartile_range:
+          lower_quartile:
             description: "Lower quartile Longitudinal Education Outcomes data for the subject. Also known as 'LEOLQ' across other available data sources."
             type: integer
           median:
@@ -841,14 +841,23 @@ components:
               23,
               24
             ]
-          higher_quartile_range:
+          sector_higher_quartile:
             description: "Sector upper quartile salary for subject. Also known as 'UQ' across other available data sources."
             type: integer
-          lower_quartile_range:
+          sector_lower_quartile:
             description: "Sector lower quartile salary for subject. Also known as 'LQ' across other available data sources."
             type: integer
-          median:
+          sector_median:
             description: "Sector Median salary for subject. Also known as 'MED' across other available data sources."
+            type: integer
+          higher_quartile:
+            description: "Course higher quartile salary. Also known as 'INSTUQ' across other available data sources."
+            type: integer
+          lower_quartile:
+            description: "Course lower quartile salary. Also known as 'INSTLQ' across other available data sources."
+            type: integer
+          median:
+            description: "Course Median salary. Also known as 'INSTMED' across other available data sources."
             type: integer
           number_of_graduates:
             description: "Number of students in the population from which the salary data is derived for the course. Also known as 'SALPOP' across other available data sources."

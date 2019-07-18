@@ -4,6 +4,15 @@
 trigger:
 - develop
 
+pr:
+  branches:
+    exclude:
+    - feature/*
+    - refactor/*
+    - bug/*
+    - bugfix/*
+    
+
 # Build Agent Resources
 pool:
   vmImage: 'ubuntu-latest'

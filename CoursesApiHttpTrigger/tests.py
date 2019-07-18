@@ -72,6 +72,41 @@ class TestCourseEndPoint(unittest.TestCase):
         self.assertEqual(course['course']['institution']['pub_ukprn'],
                          f"{institution_id}")
 
+    def test_endpoint_for_existing_course_with_tilde_in_course_id(self):
+
+        # A course that exists in the HESA dataset
+        institution_id = '10007850'
+        course_id = 'UUUL1-G104~USMA-AAM15'
+        mode = '1'
+
+        # Construct a mock HTTP request.
+        req = func.HttpRequest(
+            method='GET',
+            body=None,
+            url=
+            f'/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}',
+            params={'version': '1'},
+            route_params={
+                'institution_id': institution_id,
+                'course_id': course_id,
+                'mode': mode
+            })
+
+        # Call the function for the endpoint.
+        resp = main(req)
+
+        # Check status code
+        self.assertEqual(resp.status_code, 200)
+
+        # Check content type
+        headers = dict(resp.headers)
+        self.assertEqual(headers['content-type'], 'application/json')
+
+        # Do some checking of the returned course.
+        course = json.loads(resp.get_body().decode('utf-8'))
+        self.assertEqual(course['course']['institution']['pub_ukprn'],
+                         f"{institution_id}")
+
     def test_endpoint_for_non_existing_course(self):
 
         institution_id = '10000055'

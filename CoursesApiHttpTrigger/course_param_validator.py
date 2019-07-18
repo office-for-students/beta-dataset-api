@@ -14,7 +14,7 @@ def valid_course_params(params):
                        r'[\d]+$'):
         return False
 
-    if not valid_param("course_id", params['course_id'], 1, 30, r'[\w-]+$'):
+    if not valid_param("course_id", params['course_id'], 1, 30, r'[\w\~-]+$'):
         return False
 
     if not valid_param("mode", params['mode'], 1, 1, r'[123]$'):

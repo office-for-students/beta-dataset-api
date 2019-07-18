@@ -6,6 +6,7 @@ trigger:
 - bugfix/*
 - refactor/*
 - bug/*
+- hotfix/*
 
 # Build Agent Resources
 pool:

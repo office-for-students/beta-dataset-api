@@ -2,9 +2,7 @@
 
 # The code branch that will trigger a build
 trigger:
-- feature/*
-- bugfix/*
-- refactor/*
+- release/*
 
 # Build Agent Resources
 pool:

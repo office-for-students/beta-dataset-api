@@ -431,8 +431,6 @@ components:
       properties:
         continuation:
           $ref: '#/components/schemas/continuation'
-        degree_class:
-          $ref: '#/components/schemas/degreeClass'
         employment:
           $ref: '#/components/schemas/employment'
         entry:
@@ -519,57 +517,6 @@ components:
             type: integer
           left:
             description: "Proportion of students who are not continuing into their following year of study, have not been awarded a qualification in either of the two comparison years. Also known as 'ULEFT' across other available data sources."
-            type: integer
-          subject:
-            $ref: '#/components/schemas/subject'
-          unavailable:
-            $ref: '#/components/schemas/unavailable'
-    degreeClass:
-      description: "A list of degree class information for students."
-      type: array
-      items:
-        type: object
-        properties:
-          aggregation_level:
-            description: "Aggregation level applied to degree class information for students on the course. Also known as 'DEGAGG' across other available data sources."
-            type: integer
-            enum: [
-              12,
-              13,
-              14,
-              22,
-              23,
-              24
-            ]
-          number_of_students:
-            description: "Population of students with degree class information. Also known as 'DEGPOP' across other available data sources."
-            type: integer
-          first_class:
-            description: "Proportion of students gaining a first class degree. Also known as 'UFIRST' across other available data sources."
-            type: integer
-          upper_second_class:
-            description: "Proportion of students gaining an upper second class (2:1) degree. Also known as 'UUPPER' across other available data sources."
-            type: integer
-          lower_second_class:
-            description: "Proportion of students gaining a lower (or undivided) second class (2:1) degree. Also known as 'ULOWER' across other available data sources."
-            type: integer
-          other_honours_degree:
-            description: "Proportion of students gaining an other honours degree. Also known as 'UOTHER' across other available data sources."
-            type: integer
-          ordinary_degree:
-            description: "Proportion of students gaining an ordinary degree. Also known as 'UORDINARY' across other available data sources."
-            type: integer
-          distinction:
-            description: "Proportion of students gaining a distinction. Also known as 'UDISTINCTION' across other available data sources."
-            type: integer
-          merit:
-            description: "Proportion of students gaining a merit. Also known as 'UMERIT' across other available data sources."
-            type: integer
-          pass:
-            description: "Proportion of students gaining a pass. Also known as 'UPASS' across other available data sources."
-            type: integer
-          not_classified:
-            description: "Proportion of students gaining a not classified degree. Also known as 'UNA' across other available data sources."
             type: integer
           subject:
             $ref: '#/components/schemas/subject'
@@ -771,10 +718,10 @@ components:
               23,
               24
             ]
-          higher_quartile_range:
+          higher_quartile:
             description: "Upper quartile Longitudinal Education Outcomes data for the subject. Also known as 'LEOUQ' across other available data sources."
             type: integer
-          lower_quartile_range:
+          lower_quartile:
             description: "Lower quartile Longitudinal Education Outcomes data for the subject. Also known as 'LEOLQ' across other available data sources."
             type: integer
           median:
@@ -841,14 +788,23 @@ components:
               23,
               24
             ]
-          higher_quartile_range:
+          sector_higher_quartile:
             description: "Sector upper quartile salary for subject. Also known as 'UQ' across other available data sources."
             type: integer
-          lower_quartile_range:
+          sector_lower_quartile:
             description: "Sector lower quartile salary for subject. Also known as 'LQ' across other available data sources."
             type: integer
-          median:
+          sector_median:
             description: "Sector Median salary for subject. Also known as 'MED' across other available data sources."
+            type: integer
+          higher_quartile:
+            description: "Course higher quartile salary. Also known as 'INSTUQ' across other available data sources."
+            type: integer
+          lower_quartile:
+            description: "Course lower quartile salary. Also known as 'INSTLQ' across other available data sources."
+            type: integer
+          median:
+            description: "Course Median salary. Also known as 'INSTMED' across other available data sources."
             type: integer
           number_of_graduates:
             description: "Number of students in the population from which the salary data is derived for the course. Also known as 'SALPOP' across other available data sources."

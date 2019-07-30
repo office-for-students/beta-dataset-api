@@ -4,7 +4,6 @@ from SharedCode.string_validator import StringValidator
 
 
 def valid_institution_params(params):
-
     if not mandatory_params_present(
         ('institution_id', ), params):
         logging.error(f"Mandatory parameters missing from: {params}")

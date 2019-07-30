@@ -8,7 +8,7 @@ from .institution_fetcher import InstitutionFetcher
 
 from .utils import get_collection_link, get_cosmos_client, get_http_error_response_json
 
-from validator import valid_institution_params
+from validators import valid_institution_params
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
@@ -32,10 +32,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         params["version"] = version
         logging.info(f"Parameters: {params}")
 
-        #
-        # The params are used in DB queries, so let's do
-        # some basic sanitisation of them.
-        #
         if not valid_institution_params(params):
             logging.error(f"valid_institution_params returned false for {params}")
             return func.HttpResponse(

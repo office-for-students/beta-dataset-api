@@ -4,11 +4,15 @@ import traceback
 
 import azure.functions as func
 
+
+from SharedCode.utils import (
+    get_collection_link,
+    get_cosmos_client,
+    get_http_error_response_json,
+)
+
 from .institution_fetcher import InstitutionFetcher
-
-from .utils import get_collection_link, get_cosmos_client, get_http_error_response_json
-
-from validators import valid_institution_params
+from .validators import valid_institution_params
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:

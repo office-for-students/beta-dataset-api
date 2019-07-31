@@ -50,7 +50,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         # Intialise an InstitutionFetcher
         client = get_cosmos_client()
-        collection_link = get_collection_link()
+        collection_link = get_collection_link(
+            "AzureCosmosDbDatabaseId", "AzureCosmosDbInstitutionsCollectionId"
+        )
         institution_fetcher = InstitutionFetcher(client, collection_link)
 
         # Get the institution

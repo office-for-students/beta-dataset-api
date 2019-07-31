@@ -103,5 +103,99 @@ class TestCourseEndPoint(unittest.TestCase):
             "Institution was not found.",
         )
 
+    def test_endpoint_with_invalid_length_institution_id(self):
+
+        institution_id = "123456789"  # one char too long
+
+        # Construct a mock HTTP request.
+        req = func.HttpRequest(
+            method="GET",
+            body=None,
+            url=f"/api/institutions/{institution_id}",
+            params={"version": "1"},
+            route_params={"institution_id": institution_id},
+        )
+
+        # Call the function for the endpoint.
+        resp = main(req)
+
+        # Check status code
+        self.assertEqual(resp.status_code, 400)
+
+        # Check content type
+        headers = dict(resp.headers)
+        self.assertEqual(headers["content-type"], "application/json")
+
+        # Do some checking of the returned error message.
+        error_msg = json.loads(resp.get_body().decode("utf-8"))
+        self.assertEqual(error_msg["errors"][0]["error"], "Bad Request")
+        self.assertEqual(
+            error_msg["errors"][0]["error_values"][0]["Parameter Error"],
+            "Invalid parameter passed",
+        )
+
+    def test_endpoint_with_invalid_char_institution_id(self):
+
+        institution_id = "1000005;"  # semicolon is invalid in institution id
+
+        # Construct a mock HTTP request.
+        req = func.HttpRequest(
+            method="GET",
+            body=None,
+            url=f"/api/institutions/{institution_id}",
+            params={"version": "1"},
+            route_params={"institution_id": institution_id},
+        )
+
+        # Call the function for the endpoint.
+        resp = main(req)
+
+        # Check status code
+        self.assertEqual(resp.status_code, 400)
+
+        # Check content type
+        headers = dict(resp.headers)
+        self.assertEqual(headers["content-type"], "application/json")
+
+        # Do some checking of the returned error message.
+        error_msg = json.loads(resp.get_body().decode("utf-8"))
+        self.assertEqual(error_msg["errors"][0]["error"], "Bad Request")
+        self.assertEqual(
+            error_msg["errors"][0]["error_values"][0]["Parameter Error"],
+            "Invalid parameter passed",
+        )
+
+    def test_endpoint_with_invalid_char_semicolon_version(self):
+
+        institution_id = "10000055"
+        version = ";"  # semicolon is an invalid char for version
+
+        # Construct a mock HTTP request.
+        req = func.HttpRequest(
+            method="GET",
+            body=None,
+            url=f"/api/institutions/{institution_id}",
+            params={"version": version},
+            route_params={"institution_id": institution_id},
+        )
+
+        # Call the function for the endpoint.
+        resp = main(req)
+
+        # Check status code
+        self.assertEqual(resp.status_code, 400)
+
+        # Check content type
+        headers = dict(resp.headers)
+        self.assertEqual(headers["content-type"], "application/json")
+
+        # Do some checking of the returned error message.
+        error_msg = json.loads(resp.get_body().decode("utf-8"))
+        self.assertEqual(error_msg["errors"][0]["error"], "Bad Request")
+        self.assertEqual(
+            error_msg["errors"][0]["error_values"][0]["Parameter Error"],
+            "Invalid parameter passed",
+        )
+
 
 # TODO add more tests

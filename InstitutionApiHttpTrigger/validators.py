@@ -9,25 +9,21 @@ def valid_institution_params(params):
         logging.error(f"Mandatory parameters missing from: {params}")
         return False
 
-    if not valid_param("institution_id", params['institution_id'], 8, 8,
+    if not is_valid_param("institution_id", params['institution_id'], 8, 8,
                        r'[\d]+$'):
         return False
 
-    if not valid_param("version", params['version'], 1, 20, r'[\d]+$'):
+    if not is_valid_param("version", params['version'], 1, 10, r'[\d]+$'):
         return False
 
     return True
 
 
 def mandatory_params_present(mandatory_params, params):
-    print(f'mandatory_params is {mandatory_params}')
-    print(f'params is {params}')
-    print(mandatory_params[0])
-    print(mandatory_params[0] in params)
     return all(k in params for k in mandatory_params)
 
 
-def valid_param(name, param, min_length, max_length, regex):
+def is_valid_param(name, param, min_length, max_length, regex):
     """Test that the param looks reasonable."""
 
     if not StringValidator.is_valid_type(param):

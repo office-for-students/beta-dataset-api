@@ -72,5 +72,36 @@ class TestCourseEndPoint(unittest.TestCase):
         headers = dict(resp.headers)
         self.assertEqual(headers["content-type"], "application/json")
 
+    def test_endpoint_for_non_existing_course(self):
+
+        institution_id = "01135813"
+
+        # Construct a mock HTTP request.
+        req = func.HttpRequest(
+            method="GET",
+            body=None,
+            url=f"/api/institutions/{institution_id}",
+            params={"version": "1"},
+            route_params={"institution_id": institution_id},
+        )
+
+        # Call the function for the endpoint.
+        resp = main(req)
+
+        # Check status code
+        self.assertEqual(resp.status_code, 404)
+
+        # Check content type
+        headers = dict(resp.headers)
+        self.assertEqual(headers["content-type"], "application/json")
+
+        # Do some checking of the returned error message.
+        error_msg = json.loads(resp.get_body().decode("utf-8"))
+        self.assertEqual(error_msg["errors"][0]["error"], "Not Found")
+        self.assertEqual(
+            error_msg["errors"][0]["error_values"][0]["institution"],
+            "Institution was not found.",
+        )
+
 
 # TODO add more tests

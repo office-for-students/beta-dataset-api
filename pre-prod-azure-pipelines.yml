@@ -4,6 +4,9 @@
 trigger:
 - release/*
 
+# The pr from branches to be included or excluded to trigger build
+pr: none
+
 # Build Agent Resources
 pool:
   vmImage: 'ubuntu-latest'
@@ -30,10 +33,10 @@ steps:
   displayName: 'Install Python Dependencies'
 
 # Execute Python Tests
-#- script: |
-#    python3.6 -m pip install -r requirements.txt
-#    pytest -v
-#  displayName: 'pytest'
+- script: |
+    python3.6 -m pip install -r requirements.txt
+    pytest -v
+  displayName: 'pytest'
 
 # Archive the Azure Python Function into a ZIP package for deployment
 - task: ArchiveFiles@2

@@ -4,8 +4,6 @@ import traceback
 
 import azure.functions as func
 
-from .course_fetcher import CourseFetcher
-
 
 from SharedCode.utils import (
     get_collection_link,
@@ -13,21 +11,21 @@ from SharedCode.utils import (
     get_http_error_response_json,
 )
 
-from .course_param_validator import valid_course_params
+from .institution_fetcher import InstitutionFetcher
+from .validators import valid_institution_params
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    """Implements the REST API endpoint for getting course documents.
+    """Implements the REST API endpoint for getting an institution document.
 
     The endpoint implemented is:
-        /institutions/{institution_id}/courses/{course_id}/modes/{mode}
+        /institutions/{institution_id}/
 
-    The API is fully documented in a swagger document in the same repo
-    as this module.
+    The API is documented in a swagger document.
     """
 
     try:
-        logging.info("Process a request for a course.")
+        logging.info("Process a request for an institution resource.")
         logging.info(f"url: {req.url}")
         logging.info(f"params: {req.params}")
         logging.info(f"route_params: {req.route_params}")
@@ -38,12 +36,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         params["version"] = version
         logging.info(f"Parameters: {params}")
 
-        #
-        # The params are used in DB queries, so let's do
-        # some basic sanitisation of them.
-        #
-        if not valid_course_params(params):
-            logging.error(f"valid_course_params returned false for {params}")
+        if not valid_institution_params(params):
+            logging.error(f"valid_institution_params returned false for {params}")
             return func.HttpResponse(
                 get_http_error_response_json(
                     "Bad Request", "Parameter Error", "Invalid parameter passed"
@@ -54,29 +48,31 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         logging.info("The parameters look good")
 
-        # Intialise a CourseFetcher
+        # Intialise an InstitutionFetcher
         client = get_cosmos_client()
         collection_link = get_collection_link(
-            "AzureCosmosDbDatabaseId", "AzureCosmosDbCoursesCollectionId"
+            "AzureCosmosDbDatabaseId", "AzureCosmosDbInstitutionsCollectionId"
         )
-        course_fetcher = CourseFetcher(client, collection_link)
+        institution_fetcher = InstitutionFetcher(client, collection_link)
 
-        # Get the course
-        course = course_fetcher.get_course(**params)
+        # Get the institution
+        institution = institution_fetcher.get_institution(**params)
 
-        if course:
-            logging.info(f"Found a course {course}")
+        if institution:
+            logging.info(f"Found a institution {institution}")
             return func.HttpResponse(
-                course, headers={"Content-Type": "application/json"}, status_code=200
-            )
-        else:
-            return func.HttpResponse(
-                get_http_error_response_json(
-                    "Not Found", "course", "Course was not found."
-                ),
+                institution,
                 headers={"Content-Type": "application/json"},
-                status_code=404,
+                status_code=200,
             )
+
+        return func.HttpResponse(
+            get_http_error_response_json(
+                "Not Found", "institution", "Institution was not found."
+            ),
+            headers={"Content-Type": "application/json"},
+            status_code=404,
+        )
 
     except Exception as e:
         logging.error(traceback.format_exc())

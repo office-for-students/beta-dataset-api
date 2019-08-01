@@ -1,31 +1,30 @@
 """
-This module contains unittests for the Azure DataSet course 
-function.
+This module contains functional tests for the Azure DataSet API
+courses endpoint.
 
-The tests assume that a container has been loaded with the
-JSON course data. They could be extended to create
-a container and load it with course data.
+The tests assume that an Azure CosmosDB container has been loaded with the
+courses data from HESA in JSON format.
 
 To run these tests:
 
-    * export your Azure test environment variables (see below)
-    * make sure the Python package nose is installed
-    * type nosetests on the command line
+    * export your Azure environment variables (see below)
+    * type the following command:
+        pytest -v functional_tests.py
 
 Setting up your environment variables:
 --------------------------------------
 NOTE: Do NOT add any Azure config data to source control!
 
-Run the export commands below with Azure test config
-data set for the values of the environment variables.
+Set the following environment variables for the Azure environment
+hosting the container with the Institution data.
 
 export AzureCosmosDbUri=""
 export AzureCosmosDbKey=""
 export AzureCosmosDbDatabaseId=""
-export AzureCosmosDbCollectionId=""
+export AzureCosmosDbCoursesCollectionId=""
 
-TODO: Update so reads values from local.settings.json
 """
+
 
 import json
 import unittest

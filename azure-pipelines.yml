@@ -6,6 +6,9 @@ trigger:
 - bugfix/*
 - refactor/*
 
+# The pr from branches to be included or excluded to trigger build
+pr: none
+
 # Build Agent Resources
 pool:
   vmImage: 'ubuntu-latest'

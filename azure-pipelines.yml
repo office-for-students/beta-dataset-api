@@ -1,10 +1,8 @@
-# DevOps Pipeline definition for the OFS Beta Backend Data Pipeline 
+# DevOps Pipeline definition for the OFS Beta Backend DataSet Pipeline 
 
 # The code branch that will trigger a build
 trigger:
-- feature/*
-- bugfix/*
-- refactor/*
+- release/*
 
 # The pr from branches to be included or excluded to trigger build
 pr: none

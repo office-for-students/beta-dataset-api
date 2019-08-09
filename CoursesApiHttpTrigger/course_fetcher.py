@@ -30,7 +30,7 @@ class CourseFetcher:
             "SELECT * from c "
             f"where c.institution_id = '{institution_id}' "
             f"and c.course_id = '{course_id}' "
-            f"and c.course_mode = '{mode}' "
+            f"and c.course_mode = {mode} "
             f"and c.version = {version} ")
 
         logging.info(f'query: {query}')
@@ -64,7 +64,7 @@ class CourseFetcher:
 
     @staticmethod
     def tidy_course(course):
-        """Removes the key/value pairs Cosmos DB adds to the course"""
+        """Removes our internal items and those that Cosmos DB adds"""
 
         keys_to_delete = ['_rid', '_self', '_etag', '_attachments', '_ts', 'institution_id', 'course_id', 'course_mode']
         for key in keys_to_delete:

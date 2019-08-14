@@ -2,8 +2,6 @@ import logging
 import os
 import traceback
 
-import azure.functions as func
-
 from .course_fetcher import CourseFetcher
 
 

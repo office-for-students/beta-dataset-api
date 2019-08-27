@@ -132,15 +132,14 @@ components:
               created_at:
                 description: "A timestamp of when this resource was created."
                 type: string
-              links:
-                type: object
-                properties:
-                  self: 
-                    $ref: '#/components/schemas/selfLink'
+              is_published:
+                description: "A flag to distinguish if the resource is published or not."
+                type: boolean
               status:
                 description: "The import status of the dataset version."
                 type: string
                 enum: [
+                  "pending",
                   "in-progress",
                   "failed",
                   "completed"
@@ -150,6 +149,13 @@ components:
                 type: integer
     dataset:
       type: object
+      required: [
+        builds
+        created_at
+        is_published
+        status
+        version
+      ]
       properties:
         builds:
           description: "A list of builds to define which sub sections of the import pipeline have completed."
@@ -164,25 +170,18 @@ components:
         created_at:
           description: "A timestamp of when this resource was created."
           type: string
-        links:
-          type: object
-          properties:
-            self: 
-              $ref: '#/components/schemas/selfLink'
+        is_published:
+          description: "A flag to distinguish if the resource is published or not."
+          type: boolean
         status:
           description: "The import status of the dataset version."
           type: string
           enum: [
+            "pending",
             "in-progress",
             "failed",
             "succeeded"
           ]
-        total_number_of_courses:
-          description: "The total number of courses in this version of the dataset."
-          type: integer
-        total_number_of_institutions:
-          description: "The total number of institutions in this version of the dataset."
-          type: integer
         version:
           description: "The version number of dataset"
           type: integer
@@ -288,10 +287,13 @@ components:
     build:
       description: "The build job object to define how far a single part of the import process has completed."
       type: object
+      required: [
+        status
+      ]
       properties:
-        number_of_resources_loaded:
-          description: "The number of resources loaded for build job."
-          type: integer
+        error:
+          description: "The error message that describes what caused the build to fail."
+          type: string
         status: 
           description: "The status of the build job."
           type: string
@@ -299,7 +301,7 @@ components:
             "pending",
             "in-progress",
             "failed",
-            "completed"
+            "succeeded"
           ]
     availability:
       description: "Availability of parent object."

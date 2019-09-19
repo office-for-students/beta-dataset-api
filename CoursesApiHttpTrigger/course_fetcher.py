@@ -23,7 +23,7 @@ class CourseFetcher:
 
         """
 
-        logging.info(f'client {self.collection_link}')
+        logging.info(f"client {self.collection_link}")
 
         # Create an SQL query to retrieve the course document
         query = (
@@ -31,16 +31,18 @@ class CourseFetcher:
             f"where c.institution_id = '{institution_id}' "
             f"and c.course_id = '{course_id}' "
             f"and c.course_mode = {mode} "
-            f"and c.version = {version} ")
+            f"and c.version = {version} "
+        )
 
-        logging.info(f'query: {query}')
+        logging.info(f"query: {query}")
 
         # TODO investigate our use of partitions and the partition key
-        options = {'enableCrossPartitionQuery': True}
+        options = {"enableCrossPartitionQuery": True}
 
         # Query the course container using the sql query and options
         courses_list = list(
-            self.client.QueryItems(self.collection_link, query, options))
+            self.client.QueryItems(self.collection_link, query, options)
+        )
 
         # If no course matched the arguments passed in return None
         if not len(courses_list):
@@ -50,8 +52,7 @@ class CourseFetcher:
         if len(courses_list) > 1:
             # Something's wrong; there should be only one matching course.
             course_count = len(courses_list)
-            logging.error(
-                f'{course_count} courses returned. There should be only one.')
+            logging.error(f"{course_count} courses returned. There should be only one.")
 
         # Get the course from the list.
         course = courses_list[0]
@@ -66,11 +67,19 @@ class CourseFetcher:
     def tidy_course(course):
         """Removes our internal items and those that Cosmos DB adds"""
 
-        keys_to_delete = ['_rid', '_self', '_etag', '_attachments', '_ts', 'institution_id', 'course_id', 'course_mode']
+        keys_to_delete = [
+            "_rid",
+            "_self",
+            "_etag",
+            "_attachments",
+            "_ts",
+            "institution_id",
+            "course_id",
+            "course_mode",
+        ]
         for key in keys_to_delete:
             try:
                 del course[key]
             except KeyError:
-                logging.warning(
-                    f"The expected Comsos DB key was not found: {key}")
+                logging.warning(f"The expected Comsos DB key was not found: {key}")
         return course

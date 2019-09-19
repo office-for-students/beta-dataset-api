@@ -16,28 +16,20 @@ class TestValidCourseParams(unittest.TestCase):
             "institution_id": "10000233",
             "course_id": "KA1003",
             "mode": "1",
-            "version": "1"
+            "version": "1",
         }
 
         output_result = valid_course_params(input_params)
         self.assertTrue(output_result)
 
     def test_when_institution_id_is_missing(self):
-        input_params = {
-            "course_id": "KA1003",
-            "mode": "1",
-            "version": "1"
-        }
+        input_params = {"course_id": "KA1003", "mode": "1", "version": "1"}
 
         output_result = valid_course_params(input_params)
         self.assertFalse(output_result)
 
     def test_when_course_id_is_missing(self):
-        input_params = {
-            "institution_id": "10000233",
-            "mode": "1",
-            "version": "1"
-        }
+        input_params = {"institution_id": "10000233", "mode": "1", "version": "1"}
 
         output_result = valid_course_params(input_params)
         self.assertFalse(output_result)
@@ -46,7 +38,7 @@ class TestValidCourseParams(unittest.TestCase):
         input_params = {
             "institution_id": "10000233",
             "course_id": "KA1003",
-            "version": "1"
+            "version": "1",
         }
 
         output_result = valid_course_params(input_params)
@@ -57,7 +49,7 @@ class TestValidCourseParams(unittest.TestCase):
             "institution_id": "10000233",
             "course_id": "KA1-003",
             "mode": "1",
-            "version": "1"
+            "version": "1",
         }
 
         output_result = valid_course_params(input_params)
@@ -68,7 +60,7 @@ class TestValidCourseParams(unittest.TestCase):
             "institution_id": "10000233",
             "course_id": "KA1~003",
             "mode": "1",
-            "version": "1"
+            "version": "1",
         }
 
         output_result = valid_course_params(input_params)
@@ -79,7 +71,7 @@ class TestValidCourseParams(unittest.TestCase):
             "institution_id": "10000233",
             "course_id": "KA1(003",
             "mode": "1",
-            "version": "1"
+            "version": "1",
         }
 
         output_result = valid_course_params(input_params)
@@ -90,7 +82,7 @@ class TestValidCourseParams(unittest.TestCase):
             "institution_id": "10000233",
             "course_id": "KA1)003",
             "mode": "1",
-            "version": "1"
+            "version": "1",
         }
 
         output_result = valid_course_params(input_params)

@@ -39,22 +39,22 @@ class TestCourseEndPoint(unittest.TestCase):
     def test_endpoint_for_existing_course(self):
 
         # A course that exists in the HESA dataset
-        institution_id = '10000055'
-        course_id = 'AB37'
-        mode = '1'
+        institution_id = "10000055"
+        course_id = "AB37"
+        mode = "1"
 
         # Construct a mock HTTP request.
         req = func.HttpRequest(
-            method='GET',
+            method="GET",
             body=None,
-            url=
-            f'/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}',
-            params={'version': '1'},
+            url=f"/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}",
+            params={"version": "1"},
             route_params={
-                'institution_id': institution_id,
-                'course_id': course_id,
-                'mode': mode
-            })
+                "institution_id": institution_id,
+                "course_id": course_id,
+                "mode": mode,
+            },
+        )
 
         # Call the function for the endpoint.
         resp = main(req)
@@ -64,32 +64,33 @@ class TestCourseEndPoint(unittest.TestCase):
 
         # Check content type
         headers = dict(resp.headers)
-        self.assertEqual(headers['content-type'], 'application/json')
+        self.assertEqual(headers["content-type"], "application/json")
 
         # Do some checking of the returned course.
-        course = json.loads(resp.get_body().decode('utf-8'))
-        self.assertEqual(course['course']['institution']['pub_ukprn'],
-                         f"{institution_id}")
+        course = json.loads(resp.get_body().decode("utf-8"))
+        self.assertEqual(
+            course["course"]["institution"]["pub_ukprn"], f"{institution_id}"
+        )
 
     def test_endpoint_for_existing_course_with_tilde_in_course_id(self):
 
         # A course that exists in the HESA dataset
-        institution_id = '10007850'
-        course_id = 'UUUL1-G104~USMA-AAM15'
-        mode = '1'
+        institution_id = "10007850"
+        course_id = "UUUL1-G104~USMA-AAM15"
+        mode = "1"
 
         # Construct a mock HTTP request.
         req = func.HttpRequest(
-            method='GET',
+            method="GET",
             body=None,
-            url=
-            f'/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}',
-            params={'version': '1'},
+            url=f"/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}",
+            params={"version": "1"},
             route_params={
-                'institution_id': institution_id,
-                'course_id': course_id,
-                'mode': mode
-            })
+                "institution_id": institution_id,
+                "course_id": course_id,
+                "mode": mode,
+            },
+        )
 
         # Call the function for the endpoint.
         resp = main(req)
@@ -99,31 +100,32 @@ class TestCourseEndPoint(unittest.TestCase):
 
         # Check content type
         headers = dict(resp.headers)
-        self.assertEqual(headers['content-type'], 'application/json')
+        self.assertEqual(headers["content-type"], "application/json")
 
         # Do some checking of the returned course.
-        course = json.loads(resp.get_body().decode('utf-8'))
-        self.assertEqual(course['course']['institution']['pub_ukprn'],
-                         f"{institution_id}")
+        course = json.loads(resp.get_body().decode("utf-8"))
+        self.assertEqual(
+            course["course"]["institution"]["pub_ukprn"], f"{institution_id}"
+        )
 
     def test_endpoint_for_non_existing_course(self):
 
-        institution_id = '10000055'
-        course_id = 'BLAH'  # This course does not exist
-        mode = '1'
+        institution_id = "10000055"
+        course_id = "BLAH"  # This course does not exist
+        mode = "1"
 
         # Construct a mock HTTP request.
         req = func.HttpRequest(
-            method='GET',
+            method="GET",
             body=None,
-            url=
-            f'/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}',
-            params={'version': '1'},
+            url=f"/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}",
+            params={"version": "1"},
             route_params={
-                'institution_id': institution_id,
-                'course_id': course_id,
-                'mode': mode
-            })
+                "institution_id": institution_id,
+                "course_id": course_id,
+                "mode": mode,
+            },
+        )
 
         # Call the function for the endpoint.
         resp = main(req)
@@ -133,33 +135,34 @@ class TestCourseEndPoint(unittest.TestCase):
 
         # Check content type
         headers = dict(resp.headers)
-        self.assertEqual(headers['content-type'], 'application/json')
+        self.assertEqual(headers["content-type"], "application/json")
 
         # Do some checking of the returned error message.
-        error_msg = json.loads(resp.get_body().decode('utf-8'))
+        error_msg = json.loads(resp.get_body().decode("utf-8"))
         print(error_msg)
-        self.assertEqual(error_msg['errors'][0]["error"], "Not Found")
-        self.assertEqual(error_msg['errors'][0]["error_values"][0]['course'],
-                         'Course was not found.')
+        self.assertEqual(error_msg["errors"][0]["error"], "Not Found")
+        self.assertEqual(
+            error_msg["errors"][0]["error_values"][0]["course"], "Course was not found."
+        )
 
     def test_endpoint_with_invalid_length_institution_id(self):
 
-        institution_id = '123456789'  # one char too long
-        course_id = 'AB37'
-        mode = '1'
+        institution_id = "123456789"  # one char too long
+        course_id = "AB37"
+        mode = "1"
 
         # Construct a mock HTTP request.
         req = func.HttpRequest(
-            method='GET',
+            method="GET",
             body=None,
-            url=
-            f'/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}',
-            params={'version': '1'},
+            url=f"/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}",
+            params={"version": "1"},
             route_params={
-                'institution_id': institution_id,
-                'course_id': course_id,
-                'mode': mode
-            })
+                "institution_id": institution_id,
+                "course_id": course_id,
+                "mode": mode,
+            },
+        )
 
         # Call the function for the endpoint.
         resp = main(req)
@@ -169,34 +172,35 @@ class TestCourseEndPoint(unittest.TestCase):
 
         # Check content type
         headers = dict(resp.headers)
-        self.assertEqual(headers['content-type'], 'application/json')
+        self.assertEqual(headers["content-type"], "application/json")
 
         # Do some checking of the returned error message.
-        error_msg = json.loads(resp.get_body().decode('utf-8'))
+        error_msg = json.loads(resp.get_body().decode("utf-8"))
         print(error_msg)
-        self.assertEqual(error_msg['errors'][0]["error"], "Bad Request")
+        self.assertEqual(error_msg["errors"][0]["error"], "Bad Request")
         self.assertEqual(
-            error_msg['errors'][0]["error_values"][0]['Parameter Error'],
-            'Invalid parameter passed')
+            error_msg["errors"][0]["error_values"][0]["Parameter Error"],
+            "Invalid parameter passed",
+        )
 
     def test_endpoint_with_invalid_char_institution_id(self):
 
-        institution_id = '1000005;'  # semicolons are invalid in institution ids
-        course_id = 'AB37'
-        mode = '1'
+        institution_id = "1000005;"  # semicolons are invalid in institution ids
+        course_id = "AB37"
+        mode = "1"
 
         # Construct a mock HTTP request.
         req = func.HttpRequest(
-            method='GET',
+            method="GET",
             body=None,
-            url=
-            f'/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}',
-            params={'version': '1'},
+            url=f"/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}",
+            params={"version": "1"},
             route_params={
-                'institution_id': institution_id,
-                'course_id': course_id,
-                'mode': mode
-            })
+                "institution_id": institution_id,
+                "course_id": course_id,
+                "mode": mode,
+            },
+        )
 
         # Call the function for the endpoint.
         resp = main(req)
@@ -206,34 +210,35 @@ class TestCourseEndPoint(unittest.TestCase):
 
         # Check content type
         headers = dict(resp.headers)
-        self.assertEqual(headers['content-type'], 'application/json')
+        self.assertEqual(headers["content-type"], "application/json")
 
         # Do some checking of the returned error message.
-        error_msg = json.loads(resp.get_body().decode('utf-8'))
+        error_msg = json.loads(resp.get_body().decode("utf-8"))
         print(error_msg)
-        self.assertEqual(error_msg['errors'][0]["error"], "Bad Request")
+        self.assertEqual(error_msg["errors"][0]["error"], "Bad Request")
         self.assertEqual(
-            error_msg['errors'][0]["error_values"][0]['Parameter Error'],
-            'Invalid parameter passed')
+            error_msg["errors"][0]["error_values"][0]["Parameter Error"],
+            "Invalid parameter passed",
+        )
 
     def test_endpoint_with_invalid_length_course_id(self):
 
-        institution_id = '10000055'
-        course_id = '1234567890123456789012345678901'  # Should be no more than 30 chars
-        mode = '1'
+        institution_id = "10000055"
+        course_id = "1234567890123456789012345678901"  # Should be no more than 30 chars
+        mode = "1"
 
         # Construct a mock HTTP request.
         req = func.HttpRequest(
-            method='GET',
+            method="GET",
             body=None,
-            url=
-            f'/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}',
-            params={'version': '1'},
+            url=f"/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}",
+            params={"version": "1"},
             route_params={
-                'institution_id': institution_id,
-                'course_id': course_id,
-                'mode': mode
-            })
+                "institution_id": institution_id,
+                "course_id": course_id,
+                "mode": mode,
+            },
+        )
 
         # Call the function for the endpoint.
         resp = main(req)
@@ -243,34 +248,35 @@ class TestCourseEndPoint(unittest.TestCase):
 
         # Check content type
         headers = dict(resp.headers)
-        self.assertEqual(headers['content-type'], 'application/json')
+        self.assertEqual(headers["content-type"], "application/json")
 
         # Do some checking of the returned error message.
-        error_msg = json.loads(resp.get_body().decode('utf-8'))
+        error_msg = json.loads(resp.get_body().decode("utf-8"))
         print(error_msg)
-        self.assertEqual(error_msg['errors'][0]["error"], "Bad Request")
+        self.assertEqual(error_msg["errors"][0]["error"], "Bad Request")
         self.assertEqual(
-            error_msg['errors'][0]["error_values"][0]['Parameter Error'],
-            'Invalid parameter passed')
+            error_msg["errors"][0]["error_values"][0]["Parameter Error"],
+            "Invalid parameter passed",
+        )
 
     def test_endpoint_with_invalid_char_course_id(self):
 
-        institution_id = '10000055'
-        course_id = 'AB37;'  # semicolon is an invalid char for course id
-        mode = '1'
+        institution_id = "10000055"
+        course_id = "AB37;"  # semicolon is an invalid char for course id
+        mode = "1"
 
         # Construct a mock HTTP request.
         req = func.HttpRequest(
-            method='GET',
+            method="GET",
             body=None,
-            url=
-            f'/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}',
-            params={'version': '1'},
+            url=f"/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}",
+            params={"version": "1"},
             route_params={
-                'institution_id': institution_id,
-                'course_id': course_id,
-                'mode': mode
-            })
+                "institution_id": institution_id,
+                "course_id": course_id,
+                "mode": mode,
+            },
+        )
 
         # Call the function for the endpoint.
         resp = main(req)
@@ -280,34 +286,35 @@ class TestCourseEndPoint(unittest.TestCase):
 
         # Check content type
         headers = dict(resp.headers)
-        self.assertEqual(headers['content-type'], 'application/json')
+        self.assertEqual(headers["content-type"], "application/json")
 
         # Do some checking of the returned error message.
-        error_msg = json.loads(resp.get_body().decode('utf-8'))
+        error_msg = json.loads(resp.get_body().decode("utf-8"))
         print(error_msg)
-        self.assertEqual(error_msg['errors'][0]["error"], "Bad Request")
+        self.assertEqual(error_msg["errors"][0]["error"], "Bad Request")
         self.assertEqual(
-            error_msg['errors'][0]["error_values"][0]['Parameter Error'],
-            'Invalid parameter passed')
+            error_msg["errors"][0]["error_values"][0]["Parameter Error"],
+            "Invalid parameter passed",
+        )
 
     def test_endpoint_with_invalid_char_semicolon_mode(self):
 
-        institution_id = '10000055'
-        course_id = 'AB37'
-        mode = ';'  # semicolon is an invalid char for mode
+        institution_id = "10000055"
+        course_id = "AB37"
+        mode = ";"  # semicolon is an invalid char for mode
 
         # Construct a mock HTTP request.
         req = func.HttpRequest(
-            method='GET',
+            method="GET",
             body=None,
-            url=
-            f'/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}',
-            params={'version': '1'},
+            url=f"/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}",
+            params={"version": "1"},
             route_params={
-                'institution_id': institution_id,
-                'course_id': course_id,
-                'mode': mode
-            })
+                "institution_id": institution_id,
+                "course_id": course_id,
+                "mode": mode,
+            },
+        )
 
         # Call the function for the endpoint.
         resp = main(req)
@@ -317,35 +324,35 @@ class TestCourseEndPoint(unittest.TestCase):
 
         # Check content type
         headers = dict(resp.headers)
-        self.assertEqual(headers['content-type'], 'application/json')
+        self.assertEqual(headers["content-type"], "application/json")
 
         # Do some checking of the returned error message.
-        error_msg = json.loads(resp.get_body().decode('utf-8'))
+        error_msg = json.loads(resp.get_body().decode("utf-8"))
         print(error_msg)
-        self.assertEqual(error_msg['errors'][0]["error"], "Bad Request")
+        self.assertEqual(error_msg["errors"][0]["error"], "Bad Request")
         self.assertEqual(
-            error_msg['errors'][0]["error_values"][0]['Parameter Error'],
-            'Invalid parameter passed')
-
+            error_msg["errors"][0]["error_values"][0]["Parameter Error"],
+            "Invalid parameter passed",
+        )
 
     def test_endpoint_with_invalid_value_one_mode(self):
 
-        institution_id = '10000055'
-        course_id = 'AB37'
-        mode = 'one'  # one is an invalid for for mode
+        institution_id = "10000055"
+        course_id = "AB37"
+        mode = "one"  # one is an invalid for for mode
 
         # Construct a mock HTTP request.
         req = func.HttpRequest(
-            method='GET',
+            method="GET",
             body=None,
-            url=
-            f'/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}',
-            params={'version': '1'},
+            url=f"/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}",
+            params={"version": "1"},
             route_params={
-                'institution_id': institution_id,
-                'course_id': course_id,
-                'mode': mode
-            })
+                "institution_id": institution_id,
+                "course_id": course_id,
+                "mode": mode,
+            },
+        )
 
         # Call the function for the endpoint.
         resp = main(req)
@@ -355,34 +362,35 @@ class TestCourseEndPoint(unittest.TestCase):
 
         # Check content type
         headers = dict(resp.headers)
-        self.assertEqual(headers['content-type'], 'application/json')
+        self.assertEqual(headers["content-type"], "application/json")
 
         # Do some checking of the returned error message.
-        error_msg = json.loads(resp.get_body().decode('utf-8'))
+        error_msg = json.loads(resp.get_body().decode("utf-8"))
         print(error_msg)
-        self.assertEqual(error_msg['errors'][0]["error"], "Bad Request")
+        self.assertEqual(error_msg["errors"][0]["error"], "Bad Request")
         self.assertEqual(
-            error_msg['errors'][0]["error_values"][0]['Parameter Error'],
-            'Invalid parameter passed')
+            error_msg["errors"][0]["error_values"][0]["Parameter Error"],
+            "Invalid parameter passed",
+        )
 
     def test_endpoint_with_invalid_char_4_mode(self):
 
-        institution_id = '10000055'
-        course_id = 'AB37'
-        mode = '4'  # 4 is an invalid char for mode
+        institution_id = "10000055"
+        course_id = "AB37"
+        mode = "4"  # 4 is an invalid char for mode
 
         # Construct a mock HTTP request.
         req = func.HttpRequest(
-            method='GET',
+            method="GET",
             body=None,
-            url=
-            f'/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}',
-            params={'version': '1'},
+            url=f"/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}",
+            params={"version": "1"},
             route_params={
-                'institution_id': institution_id,
-                'course_id': course_id,
-                'mode': mode
-            })
+                "institution_id": institution_id,
+                "course_id": course_id,
+                "mode": mode,
+            },
+        )
 
         # Call the function for the endpoint.
         resp = main(req)
@@ -392,35 +400,36 @@ class TestCourseEndPoint(unittest.TestCase):
 
         # Check content type
         headers = dict(resp.headers)
-        self.assertEqual(headers['content-type'], 'application/json')
+        self.assertEqual(headers["content-type"], "application/json")
 
         # Do some checking of the returned error message.
-        error_msg = json.loads(resp.get_body().decode('utf-8'))
+        error_msg = json.loads(resp.get_body().decode("utf-8"))
         print(error_msg)
-        self.assertEqual(error_msg['errors'][0]["error"], "Bad Request")
+        self.assertEqual(error_msg["errors"][0]["error"], "Bad Request")
         self.assertEqual(
-            error_msg['errors'][0]["error_values"][0]['Parameter Error'],
-            'Invalid parameter passed')
+            error_msg["errors"][0]["error_values"][0]["Parameter Error"],
+            "Invalid parameter passed",
+        )
 
     def test_endpoint_with_invalid_char_semicolon_version(self):
 
-        institution_id = '10000055'
-        course_id = 'AB37'
-        mode = '1'
-        version = ';'  # semicolon is an invalid char for version
+        institution_id = "10000055"
+        course_id = "AB37"
+        mode = "1"
+        version = ";"  # semicolon is an invalid char for version
 
         # Construct a mock HTTP request.
         req = func.HttpRequest(
-            method='GET',
+            method="GET",
             body=None,
-            url=
-            f'/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}',
-            params={'version': version},
+            url=f"/api/institutions/{institution_id}/courses/{course_id}/modes/{mode}",
+            params={"version": version},
             route_params={
-                'institution_id': institution_id,
-                'course_id': course_id,
-                'mode': mode
-            })
+                "institution_id": institution_id,
+                "course_id": course_id,
+                "mode": mode,
+            },
+        )
 
         # Call the function for the endpoint.
         resp = main(req)
@@ -430,14 +439,15 @@ class TestCourseEndPoint(unittest.TestCase):
 
         # Check content type
         headers = dict(resp.headers)
-        self.assertEqual(headers['content-type'], 'application/json')
+        self.assertEqual(headers["content-type"], "application/json")
 
         # Do some checking of the returned error message.
-        error_msg = json.loads(resp.get_body().decode('utf-8'))
+        error_msg = json.loads(resp.get_body().decode("utf-8"))
         print(error_msg)
-        self.assertEqual(error_msg['errors'][0]["error"], "Bad Request")
+        self.assertEqual(error_msg["errors"][0]["error"], "Bad Request")
         self.assertEqual(
-            error_msg['errors'][0]["error_values"][0]['Parameter Error'],
-            'Invalid parameter passed')
+            error_msg["errors"][0]["error_values"][0]["Parameter Error"],
+            "Invalid parameter passed",
+        )
 
     # TODO add more tests

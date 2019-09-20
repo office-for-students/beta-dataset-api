@@ -87,3 +87,25 @@ class TestValidCourseParams(unittest.TestCase):
 
         output_result = valid_course_params(input_params)
         self.assertTrue(output_result)
+
+    def test_when_course_id_contains_exclamation_mark(self):
+        input_params = {
+            "institution_id": "10000233",
+            "course_id": "KA1!003",
+            "mode": "1",
+            "version": "1",
+        }
+
+        output_result = valid_course_params(input_params)
+        self.assertTrue(output_result)
+
+    def test_when_course_id_contains_dollar_sign(self):
+        input_params = {
+            "institution_id": "10000233",
+            "course_id": "KA1$003",
+            "mode": "1",
+            "version": "1",
+        }
+
+        output_result = valid_course_params(input_params)
+        self.assertTrue(output_result)

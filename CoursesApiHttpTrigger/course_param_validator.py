@@ -18,10 +18,6 @@ def valid_course_params(params):
     if not valid_param("mode", params["mode"], 1, 1, r"[123]$"):
         return False
 
-    # No upper limit on version; setting to 100 chars should be more than enough!
-    if not valid_param("version", params["version"], 1, 100, r"[\d]+$"):
-        return False
-
     return True
 
 

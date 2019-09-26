@@ -11,6 +11,7 @@ from SharedCode.utils import (
     get_cosmos_client,
     get_http_error_response_json,
 )
+from SharedCode.dataset_helper import DataSetHelper
 
 from .course_param_validator import valid_course_params
 
@@ -28,14 +29,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         logging.info("Process a request for a course.")
         logging.info(f"url: {req.url}")
-        logging.info(f"params: {req.params}")
         logging.info(f"route_params: {req.route_params}")
 
         # Put all the parameters together
         params = dict(req.route_params)
-        version = req.params.get("version", "1")
-        params["version"] = version
-        logging.info(f"Parameters: {params}")
+        dsh = DataSetHelper()
+        version = dsh.get_highest_successful_version_number()
 
         #
         # The params are used in DB queries, so let's do
@@ -61,10 +60,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         course_fetcher = CourseFetcher(client, collection_link)
 
         # Get the course
-        course = course_fetcher.get_course(**params)
+        course = course_fetcher.get_course(version=version, **params)
 
         if course:
-            logging.info(f"Found a course {course}")
             return func.HttpResponse(
                 course, headers={"Content-Type": "application/json"}, status_code=200
             )

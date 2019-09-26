@@ -10,6 +10,7 @@ from SharedCode.utils import (
     get_cosmos_client,
     get_http_error_response_json,
 )
+from SharedCode.dataset_helper import DataSetHelper
 
 from .institution_fetcher import InstitutionFetcher
 from .validators import valid_institution_params
@@ -27,13 +28,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         logging.info("Process a request for an institution resource.")
         logging.info(f"url: {req.url}")
-        logging.info(f"params: {req.params}")
         logging.info(f"route_params: {req.route_params}")
 
-        # Put all the parameters together
         params = dict(req.route_params)
-        version = req.params.get("version", "1")
-        params["version"] = version
         logging.info(f"Parameters: {params}")
 
         if not valid_institution_params(params):
@@ -56,7 +53,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         institution_fetcher = InstitutionFetcher(client, collection_link)
 
         # Get the institution
-        institution = institution_fetcher.get_institution(**params)
+        dsh = DataSetHelper()
+        version = dsh.get_highest_successful_version_number()
+        institution = institution_fetcher.get_institution(version=version, **params)
 
         if institution:
             logging.info(f"Found a institution {institution}")

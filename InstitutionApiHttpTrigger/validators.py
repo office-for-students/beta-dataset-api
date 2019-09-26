@@ -13,9 +13,6 @@ def valid_institution_params(params):
                        r'[\d]+$'):
         return False
 
-    if not is_valid_param("version", params['version'], 1, 10, r'[\d]+$'):
-        return False
-
     return True
 
 

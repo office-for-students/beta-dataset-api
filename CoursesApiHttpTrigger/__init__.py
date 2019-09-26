@@ -31,8 +31,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         logging.info(f"url: {req.url}")
         logging.info(f"route_params: {req.route_params}")
 
-        # Put all the parameters together
         params = dict(req.route_params)
+
         dsh = DataSetHelper()
         version = dsh.get_highest_successful_version_number()
 

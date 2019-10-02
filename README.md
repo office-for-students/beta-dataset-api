@@ -1,6 +1,6 @@
-beta-search-api
+beta-dataset-api
 =================
-Service to allow api customers to search for course resources.
+Service to allow api customers to request unique course and institution resources.
 
 Builds
 

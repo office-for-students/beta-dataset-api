@@ -43,8 +43,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 status_code=400,
             )
 
-        logging.info("The parameters look good")
-
         # Intialise an InstitutionFetcher
         client = get_cosmos_client()
         collection_link = get_collection_link(

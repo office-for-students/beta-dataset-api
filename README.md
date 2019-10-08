@@ -21,6 +21,7 @@ Add the following to your local.settings.json:
 | AzureCosmosDbKey                      | {retrieve from portal} | The cosmos database key in which to connect to the datastore       |
 | AzureCosmosDbConnectionString         | {retrieve from portal} | The connection string in which to connect to the datastore         |
 | AzureCosmosDbDatabaseId               | discoveruni            | The name of the database in which resource documents are stored in |
+| AzureCosmosDbDataSetCollectionId      | datasets               | The name of the collection in which datasets are uploaded to       |
 | AzureCosmosDbInstitutionsCollectionId | institutions           | The name of the collection in which institutions are uploaded to   |
 | AzureCosmosDbCoursesCollectionId      | courses                | The name of the collection in which courses are uploaded to        |
 

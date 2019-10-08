@@ -9,7 +9,7 @@ class InstitutionFetcher:
         self.client = client
         self.collection_link = collection_link
 
-    def get_institution(self, institution_id, version):
+    def get_institution(self, version, institution_id):
         """Retrieves an institution document from Cosmos DB.
 
         Queries the Cosmos DB container for an institution using the

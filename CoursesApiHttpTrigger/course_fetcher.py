@@ -1,9 +1,7 @@
 import json
 import logging
-import sys
 
 import azure.cosmos.cosmos_client as cosmos_client
-import azure.cosmos.errors as errors
 
 
 class CourseFetcher:
@@ -13,7 +11,7 @@ class CourseFetcher:
         self.client = client
         self.collection_link = collection_link
 
-    def get_course(self, institution_id, course_id, mode, version):
+    def get_course(self, version, institution_id, course_id, mode):
         """Retrieves a course document from Cosmos DB.
 
         Queries the Cosmos DB container for a course using the
@@ -22,8 +20,6 @@ class CourseFetcher:
         to the caller. If no course is found it returns None.
 
         """
-
-        logging.info(f"client {self.collection_link}")
 
         # Create an SQL query to retrieve the course document
         query = (
@@ -36,7 +32,6 @@ class CourseFetcher:
 
         logging.info(f"query: {query}")
 
-        # TODO investigate our use of partitions and the partition key
         options = {"enableCrossPartitionQuery": True}
 
         # Query the course container using the sql query and options
@@ -56,6 +51,10 @@ class CourseFetcher:
 
         # Get the course from the list.
         course = courses_list[0]
+        logging.info(
+            f"Fetched course: institution_id: {course['institution_id']}"
+            f" course_id: {course['course_id']}"
+        )
 
         # Remove unnecessary keys from the course.
         tidied_course = CourseFetcher.tidy_course(course)

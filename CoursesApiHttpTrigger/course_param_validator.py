@@ -12,14 +12,10 @@ def valid_course_params(params):
     if not valid_param("institution_id", params["institution_id"], 8, 8, r"[\d]+$"):
         return False
 
-    if not valid_param("course_id", params["course_id"], 1, 30, r"[\w\~\-()]+$"):
+    if not valid_param("course_id", params["course_id"], 1, 30, r"[\w\~\-\(\)\!\$]+$"):
         return False
 
     if not valid_param("mode", params["mode"], 1, 1, r"[123]$"):
-        return False
-
-    # No upper limit on version; setting to 100 chars should be more than enough!
-    if not valid_param("version", params["version"], 1, 100, r"[\d]+$"):
         return False
 
     return True

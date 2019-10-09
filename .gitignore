@@ -109,10 +109,14 @@ beta-dataset-api/beta-dataset-api.zip
 # For testing only 
 setup_env_vars.sh
 
+# Visual Studio Code
+.vscode 
+
 # Azure Functions artifacts
 bin
 obj
 appsettings.json
 local.settings.json
+local.settings.json.*
 .python_packages
 beta-data-pipelines.zip

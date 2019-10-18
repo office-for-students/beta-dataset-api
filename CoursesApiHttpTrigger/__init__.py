@@ -15,6 +15,15 @@ from SharedCode.dataset_helper import DataSetHelper
 
 from .course_param_validator import valid_course_params
 
+cosmosdb_uri = os.environ["AzureCosmosDbUri"]
+cosmosdb_key = os.environ["AzureCosmosDbKey"]
+cosmosdb_database_id = os.environ["AzureCosmosDbDatabaseId"]
+cosmosdb_courses_collection_id = os.environ["AzureCosmosDbCoursesCollectionId"]
+cosmosdb_dataset_collection_id = os.environ["AzureCosmosDbDataSetCollectionId"]
+
+# Intialise cosmos db client
+client = get_cosmos_client(cosmosdb_uri, cosmosdb_key)
+
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     """Implements the REST API endpoint for getting course documents.
@@ -33,9 +42,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         params = dict(req.route_params)
 
-        dsh = DataSetHelper()
-        version = dsh.get_highest_successful_version_number()
-
         #
         # The params are used in DB queries, so let's do
         # some basic sanitisation of them.
@@ -51,13 +57,16 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             )
 
         logging.info("The parameters look good")
+        
+        courses_collection_link = get_collection_link(cosmosdb_database_id, cosmosdb_courses_collection_id)
+        dataset_collection_link = get_collection_link(cosmosdb_database_id, cosmosdb_dataset_collection_id)
 
         # Intialise a CourseFetcher
-        client = get_cosmos_client()
-        collection_link = get_collection_link(
-            "AzureCosmosDbDatabaseId", "AzureCosmosDbCoursesCollectionId"
-        )
-        course_fetcher = CourseFetcher(client, collection_link)
+        course_fetcher = CourseFetcher(client, courses_collection_link)
+
+        # Initialise dataset helper - used for retrieving latest dataset version
+        dsh = DataSetHelper(client, dataset_collection_link)
+        version = dsh.get_highest_successful_version_number()
 
         # Get the course
         course = course_fetcher.get_course(version=version, **params)

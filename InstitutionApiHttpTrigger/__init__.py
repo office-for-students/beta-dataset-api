@@ -16,6 +16,16 @@ from .institution_fetcher import InstitutionFetcher
 from .validators import valid_institution_params
 
 
+cosmosdb_uri = os.environ["AzureCosmosDbUri"]
+cosmosdb_key = os.environ["AzureCosmosDbKey"]
+cosmosdb_database_id = os.environ["AzureCosmosDbDatabaseId"]
+cosmosdb_inst_collection_id = os.environ["AzureCosmosDbInstitutionsCollectionId"]
+cosmosdb_dataset_collection_id = os.environ["AzureCosmosDbDataSetCollectionId"]
+
+# Intialise a cosmos db client
+client = get_cosmos_client(cosmosdb_uri, cosmosdb_key)
+
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
     """Implements the REST API endpoint for getting an institution document.
 
@@ -43,16 +53,15 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 status_code=400,
             )
 
-        # Intialise an InstitutionFetcher
-        client = get_cosmos_client()
-        collection_link = get_collection_link(
-            "AzureCosmosDbDatabaseId", "AzureCosmosDbInstitutionsCollectionId"
-        )
-        institution_fetcher = InstitutionFetcher(client, collection_link)
+        inst_collection_link = get_collection_link(cosmosdb_database_id, cosmosdb_inst_collection_id)
+        dataset_collection_link = get_collection_link(cosmosdb_database_id, cosmosdb_dataset_collection_id)
 
-        # Get the institution
-        dsh = DataSetHelper()
+        # Initialise dataset helper - used for retrieving latest dataset version
+        dsh = DataSetHelper(client, dataset_collection_link)
         version = dsh.get_highest_successful_version_number()
+
+        # Intialise an InstitutionFetcher
+        institution_fetcher = InstitutionFetcher(client, inst_collection_link)
         institution = institution_fetcher.get_institution(version=version, **params)
 
         if institution:

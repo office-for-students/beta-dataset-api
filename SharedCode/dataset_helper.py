@@ -1,8 +1,6 @@
 import os
 import logging
 
-import azure.cosmos.cosmos_client as cosmos_client
-
 
 class DataSetHelper:
     def __init__(self, client, collection_link):

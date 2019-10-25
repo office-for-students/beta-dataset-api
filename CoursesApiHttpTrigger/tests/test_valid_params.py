@@ -1,11 +1,4 @@
 import unittest
-import os
-import sys
-import inspect
-
-CURRENTDIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-PARENTDIR = os.path.dirname(CURRENTDIR)
-sys.path.insert(0, PARENTDIR)
 
 from course_param_validator import valid_course_params
 

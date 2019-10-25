@@ -1,6 +1,13 @@
 import logging
+import os
+import inspect
+import sys
 
 from SharedCode.string_validator import StringValidator
+
+CURRENTDIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+PARENTDIR = os.path.dirname(CURRENTDIR)
+sys.path.insert(0, PARENTDIR)
 
 
 def valid_course_params(params):

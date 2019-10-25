@@ -5,12 +5,12 @@ import traceback
 import azure.functions as func
 
 
-from SharedCode.utils import (
+from ..SharedCode.utils import (
     get_collection_link,
     get_cosmos_client,
     get_http_error_response_json,
 )
-from SharedCode.dataset_helper import DataSetHelper
+from ..SharedCode.dataset_helper import DataSetHelper
 
 from .institution_fetcher import InstitutionFetcher
 from .validators import valid_institution_params

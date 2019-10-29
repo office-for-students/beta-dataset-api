@@ -1,11 +1,4 @@
 import unittest
-import os
-import sys
-import inspect
-
-CURRENTDIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-PARENTDIR = os.path.dirname(CURRENTDIR)
-sys.path.insert(0, PARENTDIR)
 
 from course_param_validator import valid_course_params
 
@@ -33,11 +26,10 @@ class TestValidCourseParams(unittest.TestCase):
         output_result = valid_course_params(input_params)
         self.assertFalse(output_result)
 
-    def test_when_course_id_is_missing(self):
+    def test_when_mode_is_missing(self):
         input_params = {
             "institution_id": "10000233",
-            "course_id": "KA1003",
-            "version": "1",
+            "course_id": "KA1003"
         }
 
         output_result = valid_course_params(input_params)
@@ -47,8 +39,7 @@ class TestValidCourseParams(unittest.TestCase):
         input_params = {
             "institution_id": "10000233",
             "course_id": "KA1-003",
-            "mode": "1",
-            "version": "1",
+            "mode": "1"
         }
 
         output_result = valid_course_params(input_params)
@@ -58,8 +49,7 @@ class TestValidCourseParams(unittest.TestCase):
         input_params = {
             "institution_id": "10000233",
             "course_id": "KA1~003",
-            "mode": "1",
-            "version": "1",
+            "mode": "1"
         }
 
         output_result = valid_course_params(input_params)
@@ -69,8 +59,7 @@ class TestValidCourseParams(unittest.TestCase):
         input_params = {
             "institution_id": "10000233",
             "course_id": "KA1(003",
-            "mode": "1",
-            "version": "1",
+            "mode": "1"
         }
 
         output_result = valid_course_params(input_params)
@@ -80,8 +69,7 @@ class TestValidCourseParams(unittest.TestCase):
         input_params = {
             "institution_id": "10000233",
             "course_id": "KA1)003",
-            "mode": "1",
-            "version": "1",
+            "mode": "1"
         }
 
         output_result = valid_course_params(input_params)
@@ -91,8 +79,7 @@ class TestValidCourseParams(unittest.TestCase):
         input_params = {
             "institution_id": "10000233",
             "course_id": "KA1!003",
-            "mode": "1",
-            "version": "1",
+            "mode": "1"
         }
 
         output_result = valid_course_params(input_params)
@@ -102,8 +89,7 @@ class TestValidCourseParams(unittest.TestCase):
         input_params = {
             "institution_id": "10000233",
             "course_id": "KA1$003",
-            "mode": "1",
-            "version": "1",
+            "mode": "1"
         }
 
         output_result = valid_course_params(input_params)

@@ -1,4 +1,11 @@
 import logging
+import os
+import inspect
+import sys
+
+CURRENTDIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+PARENTDIR = os.path.dirname(CURRENTDIR)
+sys.path.insert(0, PARENTDIR)
 
 from SharedCode.string_validator import StringValidator
 

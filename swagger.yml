@@ -202,6 +202,9 @@ components:
               pub_ukprn_name:
                 description: "The name of the publication UK provider for where the course is primarily taught."
                 type: string
+              pub_ukprn_welsh_name:
+                description: "The welsh name of the publication UK provider for where the course is primarily taught."
+                type: string
               pub_ukprn:
                 description: "Publication UK provider reference number for where the course is primarily taught. Also known as 'PUBUKPRN' across other available data sources."
                 type: string
@@ -922,11 +925,13 @@ components:
         courses,
         links,
         pub_ukprn_name,
+        pub_ukprn_welsh_name,
         pub_ukprn,
         pub_ukprn_country,
         tef_outcome,
         total_number_of_courses,
         ukprn_name,
+        ukprn_welsh_name,
         ukprn,
         ukprn_country
       ]
@@ -1054,6 +1059,9 @@ components:
         pub_ukprn_name:
           description: "The name of the publication UK provider for where the course is primarily taught."
           type: string
+        pub_ukprn_welsh_name:
+          description: "The welsh name of the publication UK provider for where the course is primarily taught."
+          type: string
         pub_ukprn:
           description: "Publication UK provider reference number for where the course is primarily taught. Also known as 'PUBUKPRN' across other available data sources."
           type: string
@@ -1068,6 +1076,9 @@ components:
           type: string
         ukprn_name:
           description: "The name of the UK provider registered on the UK Register of Learning Providers (UKRLP)."
+          type: string
+        ukprn_welsh_name:
+          description: "The welsh name of the UK provider registered on the UK Register of Learning Providers (UKRLP)."
           type: string
         ukprn:
           description: "UK provider reference number, which is the unique identifier allocated to providers by the UK Register of Learning Providers (UKRLP). Also known as 'UKPRN' across other available data sources."
@@ -1172,8 +1183,10 @@ components:
           description: "An object containing information on the teaching UK provider."
           required: [
             pub_ukprn_name,
+            pub_ukprn_welsh_name,
             pub_ukprn,
             ukprn_name,
+            ukprn_welsh_name,
             ukprn
           ]
           type: object
@@ -1181,11 +1194,17 @@ components:
             pub_ukprn_name:
               description: "The name of the publication UK provider for where the course is primarily taught."
               type: string
+            pub_ukprn_welsh_name:
+              description: "The welsh name of the publication UK provider for where the course is primarily taught."
+              type: string
             pub_ukprn:
               description: "Publication UK provider reference number for where the course is primarily taught. Also known as 'PUBUKPRN' across other available data sources."
               type: string
             ukprn_name:
               description: "The name of the UK provider registered on the UK Register of Learning Providers (UKRLP)."
+              type: string
+            ukprn_welsh_name:
+              description: "The welsh name of the UK provider registered on the UK Register of Learning Providers (UKRLP)."
               type: string
             ukprn:
               description: "UK provider reference number, which is the unique identifier allocated to providers by the UK Register of Learning Providers (UKRLP). Also known as 'UKPRN' across other available data sources."

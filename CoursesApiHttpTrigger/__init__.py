@@ -66,7 +66,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         # Initialise dataset helper - used for retrieving latest dataset version
         dsh = DataSetHelper(client, dataset_collection_link)
-        version = dsh.get_highest_successful_version_number()
+        if hardcoded_highest_dataset and hardcoded_highest_dataset > 0:
+            version = 78
+        else:
+            version = dsh.get_highest_successful_version_number()
 
         # Get the course
         course = course_fetcher.get_course(version=version, **params)

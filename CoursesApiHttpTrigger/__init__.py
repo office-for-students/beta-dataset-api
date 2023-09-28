@@ -20,6 +20,7 @@ cosmosdb_key = os.environ["AzureCosmosDbKey"]
 cosmosdb_database_id = os.environ["AzureCosmosDbDatabaseId"]
 cosmosdb_courses_collection_id = os.environ["AzureCosmosDbCoursesCollectionId"]
 cosmosdb_dataset_collection_id = os.environ["AzureCosmosDbDataSetCollectionId"]
+hardcoded_highest_dataset = os.environ.get("HardcodedHighestDataset")
 
 # Intialise cosmos db client
 client = get_cosmos_client(cosmosdb_uri, cosmosdb_key)
@@ -66,7 +67,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         # Initialise dataset helper - used for retrieving latest dataset version
         dsh = DataSetHelper(client, dataset_collection_link)
-        if hardcoded_highest_dataset and hardcoded_highest_dataset > 0:
+        if hardcoded_highest_dataset and int(hardcoded_highest_dataset) > 0:
             version = 78
         else:
             version = dsh.get_highest_successful_version_number()
